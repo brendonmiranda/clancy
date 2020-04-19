@@ -1,9 +1,10 @@
 package io.github.brendonmiranda.javabot.config;
 
+import com.jagrosh.jdautilities.command.CommandClient;
+import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import io.github.brendonmiranda.javabot.listener.ReadyListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,17 +19,30 @@ import javax.security.auth.login.LoginException;
 @Configuration
 public class BotConfiguration {
 
-    private static Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
-
     @Value("${token}")
     private String token;
 
+    @Value("${prefix}")
+    private String prefix;
+
+    @Value("${owner}")
+    private Long owner;
+
     @Bean
-    public JDA load() throws LoginException, InterruptedException {
+    public JDA load() throws LoginException {
 
-        return JDABuilder.createDefault(token)
-                .build().awaitReady();
+        CommandClient cmdListener = new CommandClientBuilder()
+                .setPrefix(prefix)
+                .setOwnerId(Long.toString(owner))
+                .addCommands()
+                .build();
+
+        JDA jda = JDABuilder.createDefault(token)
+                .build();
+
+        jda.addEventListener(cmdListener, new ReadyListener());
+
+        return jda;
     }
-
 
 }
