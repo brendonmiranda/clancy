@@ -6,7 +6,7 @@ plugins {
 
 group = 'io.github.brendonmiranda'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '14'
+sourceCompatibility = '13'
 
 configurations {
 	developmentOnly
@@ -29,8 +29,11 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
+
 	implementation 'net.dv8tion:JDA:4.1.1_137'
 	implementation 'com.jagrosh:jda-utilities:3.0.3'
+	implementation 'com.sedmelluq:lavaplayer:1.3.47'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
