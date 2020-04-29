@@ -15,7 +15,7 @@ public class AudioSendHandlerImpl implements AudioSendHandler {
 
     private static Logger logger = LoggerFactory.getLogger(AudioSendHandlerImpl.class);
 
-    private AudioPlayer audioPlayer;
+    private final AudioPlayer audioPlayer;
     private AudioFrame lastFrame;
 
     public AudioSendHandlerImpl(final AudioPlayer audioPlayer) {
@@ -38,8 +38,7 @@ public class AudioSendHandlerImpl implements AudioSendHandler {
         return true;
     }
 
-    public AudioPlayer getPlayer()
-    {
+    public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }
 

@@ -9,6 +9,7 @@ import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.listener.music.PauseCmd;
 import io.github.brendonmiranda.javabot.listener.music.PlayCmd;
+import io.github.brendonmiranda.javabot.listener.music.StopCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.slf4j.Logger;
@@ -45,9 +46,12 @@ public class BotConfiguration {
         CommandClient cmdListener = new CommandClientBuilder()
                 .setPrefix(prefix)
                 .setOwnerId(Long.toString(owner))
-                .addCommands(new PlayCmd(audioPlayerManager, audioEventListener), new PauseCmd())
+                .addCommands(new PlayCmd(audioPlayerManager, audioEventListener),
+                                         new StopCmd(),
+                                         new PauseCmd())
                 .build();
 
+        // todo : implement settings discord
         JDA jda = JDABuilder.createDefault(token)
                 .build();
 
