@@ -20,14 +20,14 @@ public class PauseCmd extends Command {
     }
 
     protected void execute(final CommandEvent event){
-        AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl)event.getGuild().getAudioManager().getSendingHandler();
+        AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager().getSendingHandler();
 
-        if(audioSendHandler.getPlayer().isPaused()){
+        if(audioSendHandler.getAudioPlayer().isPaused()){
             event.replyWarning("I know this song is sucks but it is already paused! Type `"+event.getClient().getPrefix()+"play` to give it another chance.");
             return;
         }
 
-        audioSendHandler.getPlayer().setPaused(true);
-        event.replySuccess("Is it too bad? Ok, paused **"+audioSendHandler.getPlayer().getPlayingTrack().getInfo().title+"**.");
+        audioSendHandler.getAudioPlayer().setPaused(true);
+        event.replySuccess("Is it too bad? Ok, paused **"+audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title+"**.");
         }
 }
