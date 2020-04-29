@@ -11,17 +11,19 @@ import org.slf4j.LoggerFactory;
  */
 public class StopCmd extends Command {
 
-    private static Logger logger = LoggerFactory.getLogger(StopCmd.class);
+	private static Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
-    public StopCmd(){
-        this.name = "stop";
-        this.help = "stops the current song";
-        this.guildOnly = true;
-    }
+	public StopCmd() {
+		this.name = "stop";
+		this.help = "stops the current song";
+		this.guildOnly = true;
+	}
 
-    protected void execute(final CommandEvent event){
-        AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager().getSendingHandler();
-        audioSendHandler.getAudioPlayer().stopTrack();
-        event.reply("The player has stopped");
-    }
+	protected void execute(final CommandEvent event) {
+		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
+				.getSendingHandler();
+		audioSendHandler.getAudioPlayer().stopTrack();
+		event.reply("The player has stopped");
+	}
+
 }

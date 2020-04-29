@@ -1,8 +1,19 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.21")
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 }
+
+apply plugin: 'io.spring.javaformat'
 
 group = 'io.github.brendonmiranda'
 version = '0.0.1-SNAPSHOT'

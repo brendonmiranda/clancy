@@ -11,25 +11,27 @@ import org.springframework.stereotype.Component;
 
 /**
  * Listener for events of audio reproducing
+ *
  * @author brendonmiranda
  */
 @Component
 public class AudioEventListener extends AudioEventAdapter {
 
-    private static Logger logger = LoggerFactory.getLogger(AudioEventListener.class);
+	private static Logger logger = LoggerFactory.getLogger(AudioEventListener.class);
 
-    @Override
-    public void onTrackStart(AudioPlayer player, AudioTrack track) {
-        AudioTrackInfo audioTrackInfo = track.getInfo();
-        logger.info("Track has started: title {}, author {}, identifier {}, source {}", audioTrackInfo.title, audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
-    }
+	@Override
+	public void onTrackStart(AudioPlayer player, AudioTrack track) {
+		AudioTrackInfo audioTrackInfo = track.getInfo();
+		logger.info("Track has started: title {}, author {}, identifier {}, source {}", audioTrackInfo.title,
+				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
+	}
 
-    @Override
-    public void onTrackEnd(final AudioPlayer player, final AudioTrack track, final AudioTrackEndReason endReason) {
-    }
+	@Override
+	public void onTrackEnd(final AudioPlayer player, final AudioTrack track, final AudioTrackEndReason endReason) {
+	}
 
-    @Override
-    public void onPlayerPause(final AudioPlayer player) {
-    }
+	@Override
+	public void onPlayerPause(final AudioPlayer player) {
+	}
 
 }

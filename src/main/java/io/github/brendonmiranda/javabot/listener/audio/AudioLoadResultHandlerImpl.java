@@ -11,42 +11,45 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Handler for events of audio loading
+ *
  * @author brendonmiranda
  */
 public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(AudioLoadResultHandlerImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(AudioLoadResultHandlerImpl.class);
 
-    private AudioPlayer audioPlayer;
+	private AudioPlayer audioPlayer;
 
-    public AudioLoadResultHandlerImpl(final AudioPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
-    }
+	public AudioLoadResultHandlerImpl(final AudioPlayer audioPlayer) {
+		this.audioPlayer = audioPlayer;
+	}
 
-    /**
-     * It plays a track loaded
-     * @param track
-     */
-    @Override
-    public void trackLoaded(final AudioTrack track) {
-        AudioTrackInfo audioTrackInfo = track.getInfo();
-        logger.info("Track has loaded: title {}, author {}, identifier {}, source {}", audioTrackInfo.title, audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
+	/**
+	 * It plays a track loaded
+	 * @param track
+	 */
+	@Override
+	public void trackLoaded(final AudioTrack track) {
+		AudioTrackInfo audioTrackInfo = track.getInfo();
+		logger.info("Track has loaded: title {}, author {}, identifier {}, source {}", audioTrackInfo.title,
+				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-        audioPlayer.playTrack(track);
-    }
+		audioPlayer.playTrack(track);
+	}
 
-    @Override
-    public void playlistLoaded(final AudioPlaylist playlist) {
+	@Override
+	public void playlistLoaded(final AudioPlaylist playlist) {
 
-    }
+	}
 
-    @Override
-    public void noMatches() {
+	@Override
+	public void noMatches() {
 
-    }
+	}
 
-    @Override
-    public void loadFailed(final FriendlyException exception) {
+	@Override
+	public void loadFailed(final FriendlyException exception) {
 
-    }
+	}
+
 }

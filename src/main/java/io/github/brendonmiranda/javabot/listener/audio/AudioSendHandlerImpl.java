@@ -13,33 +13,34 @@ import java.nio.ByteBuffer;
  */
 public class AudioSendHandlerImpl implements AudioSendHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(AudioSendHandlerImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(AudioSendHandlerImpl.class);
 
-    private final AudioPlayer audioPlayer;
-    private AudioFrame lastFrame;
+	private final AudioPlayer audioPlayer;
 
-    public AudioSendHandlerImpl(final AudioPlayer audioPlayer) {
-        this.audioPlayer = audioPlayer;
-    }
+	private AudioFrame lastFrame;
 
-    @Override
-    public boolean canProvide() {
-        lastFrame = audioPlayer.provide();
-        return lastFrame != null;
-    }
+	public AudioSendHandlerImpl(final AudioPlayer audioPlayer) {
+		this.audioPlayer = audioPlayer;
+	}
 
-    @Override
-    public ByteBuffer provide20MsAudio() {
-        return ByteBuffer.wrap(lastFrame.getData());
-    }
+	@Override
+	public boolean canProvide() {
+		lastFrame = audioPlayer.provide();
+		return lastFrame != null;
+	}
 
-    @Override
-    public boolean isOpus() {
-        return true;
-    }
+	@Override
+	public ByteBuffer provide20MsAudio() {
+		return ByteBuffer.wrap(lastFrame.getData());
+	}
 
-    public AudioPlayer getAudioPlayer() {
-        return audioPlayer;
-    }
+	@Override
+	public boolean isOpus() {
+		return true;
+	}
+
+	public AudioPlayer getAudioPlayer() {
+		return audioPlayer;
+	}
 
 }
