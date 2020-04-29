@@ -6,7 +6,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.listener.music.PauseCmd;
 import io.github.brendonmiranda.javabot.listener.music.PlayCmd;
 import io.github.brendonmiranda.javabot.listener.music.StopCmd;
