@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.listener.music.PauseCmd;
 import io.github.brendonmiranda.javabot.listener.music.PlayCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -44,7 +45,7 @@ public class BotConfiguration {
         CommandClient cmdListener = new CommandClientBuilder()
                 .setPrefix(prefix)
                 .setOwnerId(Long.toString(owner))
-                .addCommands(new PlayCmd(audioPlayerManager, audioEventListener))
+                .addCommands(new PlayCmd(audioPlayerManager, audioEventListener), new PauseCmd())
                 .build();
 
         JDA jda = JDABuilder.createDefault(token)
