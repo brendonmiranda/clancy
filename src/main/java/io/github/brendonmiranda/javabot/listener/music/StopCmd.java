@@ -22,7 +22,6 @@ public class StopCmd extends Command {
     protected void execute(final CommandEvent event){
         AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl)event.getGuild().getAudioManager().getSendingHandler();
         audioSendHandler.getAudioPlayer().stopTrack();
-        event.getGuild().getAudioManager().closeAudioConnection();
-        event.reply(event.getClient().getSuccess()+" The player has stopped");
+        event.reply(" The player has stopped");
     }
 }
