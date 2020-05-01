@@ -9,17 +9,17 @@ import org.slf4j.LoggerFactory;
 import java.nio.ByteBuffer;
 
 /**
- * It sends audio to discord
+ * Sends audio to discord
  */
 public class AudioSendHandlerImpl implements AudioSendHandler {
 
-	private static Logger logger = LoggerFactory.getLogger(AudioSendHandlerImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(AudioSendHandlerImpl.class);
 
 	private final AudioPlayer audioPlayer;
 
 	private AudioFrame lastFrame;
 
-	public AudioSendHandlerImpl(final AudioPlayer audioPlayer) {
+	public AudioSendHandlerImpl(AudioPlayer audioPlayer) {
 		this.audioPlayer = audioPlayer;
 	}
 

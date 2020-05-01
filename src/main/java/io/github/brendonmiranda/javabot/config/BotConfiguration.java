@@ -6,9 +6,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.music.PauseCmd;
-import io.github.brendonmiranda.javabot.listener.music.PlayCmd;
-import io.github.brendonmiranda.javabot.listener.music.StopCmd;
+import io.github.brendonmiranda.javabot.listener.cmd.music.PauseCmd;
+import io.github.brendonmiranda.javabot.listener.cmd.music.PlayCmd;
+import io.github.brendonmiranda.javabot.listener.cmd.music.StopCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.slf4j.Logger;
@@ -21,13 +21,11 @@ import javax.security.auth.login.LoginException;
 
 /**
  * @author brendonmiranda
- * @see {@link https://github.com/sedmelluq/lavaplayer}
- * @see {@link https://github.com/DV8FromTheWorld/JDA}
  */
 @Configuration
 public class BotConfiguration {
 
-	private static Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
 
 	@Value("${token}")
 	private String token;

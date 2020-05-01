@@ -1,25 +1,19 @@
-package io.github.brendonmiranda.javabot.listener.music;
+package io.github.brendonmiranda.javabot.listener.cmd.music;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author evelynvieira
  */
-public class PauseCmd extends Command {
-
-	private static Logger logger = LoggerFactory.getLogger(PauseCmd.class);
+public class PauseCmd extends MusicCmd {
 
 	public PauseCmd() {
 		this.name = "pause";
 		this.help = "pauses the current song";
-		this.guildOnly = true;
 	}
 
-	protected void execute(final CommandEvent event) {
+	public void command(CommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
