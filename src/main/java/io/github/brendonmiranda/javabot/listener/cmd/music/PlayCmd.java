@@ -32,7 +32,8 @@ public class PlayCmd extends MusicCmd {
 		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
 		audioPlayer.addListener(audioListener);
 
-		audioPlayerManager.loadItem(event.getArgs(), new AudioLoadResultHandlerImpl(audioPlayer, event));
+		audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(),
+				new AudioLoadResultHandlerImpl(audioPlayer, event, audioPlayerManager, Boolean.FALSE));
 	}
 
 }

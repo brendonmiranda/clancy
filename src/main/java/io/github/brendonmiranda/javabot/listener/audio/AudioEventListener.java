@@ -32,7 +32,7 @@ public class AudioEventListener extends AudioEventAdapter {
 	}
 
 	@Override
-	public void onTrackEnd(final AudioPlayer player, final AudioTrack track, final AudioTrackEndReason endReason) {
+	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
 		logger.debug("Track has ended. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
@@ -45,7 +45,7 @@ public class AudioEventListener extends AudioEventAdapter {
 	}
 
 	@Override
-	public void onPlayerPause(final AudioPlayer player) {
+	public void onPlayerPause(AudioPlayer player) {
 	}
 
 }
