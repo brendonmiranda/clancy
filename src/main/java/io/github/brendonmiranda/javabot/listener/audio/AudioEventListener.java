@@ -38,7 +38,7 @@ public class AudioEventListener extends AudioEventAdapter {
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
 		// Plays the next track from queue
-		if (!queue.isEmpty()) {
+		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
 			player.playTrack(queue.get(0));
 			queue.remove(0);
 		}
@@ -46,6 +46,11 @@ public class AudioEventListener extends AudioEventAdapter {
 
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
+		logger.info("On play pause achieved");
 	}
 
+	@Override
+	public void onPlayerResume(AudioPlayer player) {
+		logger.info("On play resume achieved");
+	}
 }
