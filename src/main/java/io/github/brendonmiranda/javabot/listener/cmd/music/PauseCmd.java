@@ -17,15 +17,17 @@ public class PauseCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
+		//if () {}
+
 		if (audioSendHandler.getAudioPlayer().isPaused()) {
-			event.replyWarning("I know this song is sucks but it is already paused! Type `"
-					+ event.getClient().getPrefix() + "play` to give it another chance.");
+			event.replyWarning("The player is already paused! Type `"
+					+ event.getClient().getPrefix() + "resume` to unpause.");
 			return;
 		}
 
 		audioSendHandler.getAudioPlayer().setPaused(true);
-		event.replySuccess("Is it too bad? Ok, paused **"
-				+ audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
+		event.replySuccess("Paused **"
+				+ audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**. Type `"+ event.getClient().getPrefix()+"resume` to unpause!");
 	}
 
 }
