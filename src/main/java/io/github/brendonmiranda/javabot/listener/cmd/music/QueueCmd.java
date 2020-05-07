@@ -8,21 +8,22 @@ import org.slf4j.LoggerFactory;
 
 public class QueueCmd extends MusicCmd {
 
-    private static final Logger logger = LoggerFactory.getLogger(QueueCmd.class);
+	private static final Logger logger = LoggerFactory.getLogger(QueueCmd.class);
 
-    public QueueCmd() {
-        this.name = "queue";
-        this.help = "shows the current queue";
-    }
+	public QueueCmd() {
+		this.name = "queue";
+		this.help = "shows the current queue";
+	}
 
-    @Override
-    public void command(CommandEvent event)  {
-        if (!AudioEventListener.queue.isEmpty())
-            if (AudioEventListener.queue.size() == 1)
-                event.reply("Your queue has " + AudioEventListener.queue.size() + " song.");
-            else
-                event.reply("Your queue has " + AudioEventListener.queue.size() + " songs.");
-        else
-            event.reply("Your queue is empty.");
-    }
+	@Override
+	public void command(CommandEvent event) {
+		if (!AudioEventListener.queue.isEmpty())
+			if (AudioEventListener.queue.size() == 1)
+				event.reply("Your queue has " + AudioEventListener.queue.size() + " song.");
+			else
+				event.reply("Your queue has " + AudioEventListener.queue.size() + " songs.");
+		else
+			event.reply("Your queue is empty.");
+	}
+
 }

@@ -40,7 +40,8 @@ public class BotConfiguration {
 		logger.debug("Configuring Java Discord Api");
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener), new StopCmd(), new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
+				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener), new StopCmd(), new PauseCmd(),
+						new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
 				.build();
 
 		// todo : implement settings discord
