@@ -6,6 +6,9 @@ import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author evelynvieira
+ */
 public class QueueCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(QueueCmd.class);
