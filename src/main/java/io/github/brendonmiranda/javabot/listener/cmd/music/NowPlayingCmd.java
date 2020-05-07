@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
+/**
+ * @author evelynvieira
+ */
 public class NowPlayingCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(NowPlayingCmd.class);
