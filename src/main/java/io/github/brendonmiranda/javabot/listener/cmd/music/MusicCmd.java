@@ -5,6 +5,9 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+/**
+ * @author brendonmiranda
+ */
 public abstract class MusicCmd extends Command {
 
 	public MusicCmd() {

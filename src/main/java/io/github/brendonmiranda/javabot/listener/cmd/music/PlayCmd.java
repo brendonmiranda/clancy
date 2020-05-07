@@ -1,6 +1,7 @@
 package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
@@ -17,11 +18,15 @@ public class PlayCmd extends MusicCmd {
 
 	private final AudioPlayerManager audioPlayerManager;
 
-	private final AudioEventListener audioListener;
+	private final AudioEventListener audioListener; // todo remove it. Instantiate in
+													// command method
 
-	public PlayCmd(AudioPlayerManager audioPlayerManager, AudioEventListener audioListener) {
+	private final EventWaiter eventWaiter;
+
+	public PlayCmd(AudioPlayerManager audioPlayerManager, AudioEventListener audioListener, EventWaiter eventWaiter) {
 		this.audioPlayerManager = audioPlayerManager;
 		this.audioListener = audioListener;
+		this.eventWaiter = eventWaiter;
 		this.name = "play";
 	}
 
@@ -32,8 +37,11 @@ public class PlayCmd extends MusicCmd {
 		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
 		audioPlayer.addListener(audioListener);
 
-		audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(),
-				new AudioLoadResultHandlerImpl(audioPlayer, event, audioPlayerManager, Boolean.FALSE));
+		event.reply("Looking for your media", (message) -> {
+			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new AudioLoadResultHandlerImpl(
+					audioPlayer, event, audioPlayerManager, eventWaiter, message, Boolean.FALSE));
+		});
+
 	}
 
 }

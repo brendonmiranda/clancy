@@ -1,6 +1,8 @@
 package io.github.brendonmiranda.javabot.listener.audio;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -8,8 +10,12 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.MessageChannel;
+
+import java.util.concurrent.TimeUnit;
 
 import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
@@ -28,13 +34,19 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
 	private final AudioPlayerManager audioPlayerManager;
 
+	private final EventWaiter eventWaiter;
+
+	private final Message message;
+
 	private boolean ytsearch;
 
 	public AudioLoadResultHandlerImpl(AudioPlayer audioPlayer, CommandEvent event,
-			AudioPlayerManager audioPlayerManager, boolean ytsearch) {
+			AudioPlayerManager audioPlayerManager, EventWaiter eventWaiter, Message message, boolean ytsearch) {
 		this.audioPlayer = audioPlayer;
 		this.event = event;
 		this.audioPlayerManager = audioPlayerManager;
+		this.eventWaiter = eventWaiter;
+		this.message = message;
 		this.ytsearch = ytsearch;
 	}
 
@@ -76,10 +88,28 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 	 */
 	@Override
 	public void playlistLoaded(final AudioPlaylist playlist) {
-		if (playlist.isSearchResult())
-			queueTracks(playlist.getTracks().get(0));
-		else
+
+		if (playlist.isSearchResult()) {
+			OrderedMenu.Builder builder = new OrderedMenu.Builder().allowTextInput(true).useNumbers()
+					.useCancelButton(true).setEventWaiter(eventWaiter).setTimeout(1, TimeUnit.MINUTES);
+
+			builder.setText("Search results for " + event.getArgs() + " :").setSelection((msg, i) -> {
+				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
+				queueTracks(audioTrack);
+			}).setCancel((msg) -> {
+			}).setUsers(event.getAuthor());
+
+			for (int i = 0; i <= 4; i++) {
+				AudioTrack audioTrack = playlist.getTracks().get(i);
+				builder.addChoice(audioTrack.getInfo().title);
+			}
+
+			builder.build().display(message);
+
+		}
+		else {
 			event.replyError("Sorry, we are unable to load a playlist. Please, contact the bot admin.");
+		}
 	}
 
 	/**
@@ -90,8 +120,8 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 	public void noMatches() {
 		// conditional to avoid loop
 		if (!ytsearch)
-			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(),
-					new AudioLoadResultHandlerImpl(audioPlayer, event, audioPlayerManager, Boolean.TRUE));
+			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new AudioLoadResultHandlerImpl(audioPlayer,
+					event, audioPlayerManager, eventWaiter, message, Boolean.TRUE));
 		else
 			event.replyError("Sorry, we were unable to achieve your media. Please, rephrase and try again.");
 	}

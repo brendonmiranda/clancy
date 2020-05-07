@@ -2,6 +2,7 @@ package io.github.brendonmiranda.javabot.config;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
@@ -35,21 +36,26 @@ public class BotConfiguration {
 	private Long owner;
 
 	@Bean
-	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener)
-			throws LoginException {
+	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener,
+			EventWaiter eventWaiter) throws LoginException {
 		logger.debug("Configuring Java Discord Api");
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener), new StopCmd(), new PauseCmd(),
-						new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
+				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(),
+						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
 				.build();
 
 		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
 
-		jda.addEventListener(cmdListener);
+		jda.addEventListener(cmdListener, eventWaiter);
 
 		return jda;
+	}
+
+	@Bean
+	public EventWaiter eventWaiter() {
+		return new EventWaiter();
 	}
 
 	/**
