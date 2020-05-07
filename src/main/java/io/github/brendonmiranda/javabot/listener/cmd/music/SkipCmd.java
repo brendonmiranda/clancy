@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author evelynvieira 
+ * @author evelynvieira
  */
 public class SkipCmd extends MusicCmd {
 

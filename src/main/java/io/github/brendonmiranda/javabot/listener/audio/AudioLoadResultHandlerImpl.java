@@ -13,7 +13,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.MessageChannel;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +37,8 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
 	private final Message message;
 
+	private final OrderedMenu.Builder builder;
+
 	private boolean ytsearch;
 
 	public AudioLoadResultHandlerImpl(AudioPlayer audioPlayer, CommandEvent event,
@@ -48,6 +49,8 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 		this.eventWaiter = eventWaiter;
 		this.message = message;
 		this.ytsearch = ytsearch;
+		this.builder = new OrderedMenu.Builder().allowTextInput(true).useNumbers().useCancelButton(true)
+				.setEventWaiter(eventWaiter).setTimeout(1, TimeUnit.MINUTES);
 	}
 
 	@Override
@@ -90,8 +93,6 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 	public void playlistLoaded(final AudioPlaylist playlist) {
 
 		if (playlist.isSearchResult()) {
-			OrderedMenu.Builder builder = new OrderedMenu.Builder().allowTextInput(true).useNumbers()
-					.useCancelButton(true).setEventWaiter(eventWaiter).setTimeout(1, TimeUnit.MINUTES);
 
 			builder.setText("Search results for " + event.getArgs() + " :").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
