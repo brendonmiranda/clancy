@@ -46,11 +46,11 @@ public class AudioEventListener extends AudioEventAdapter {
 
 	@Override
 	public void onPlayerPause(AudioPlayer player) {
-		logger.info("On play pause achieved");
+
 	}
 
 	@Override
 	public void onPlayerResume(AudioPlayer player) {
-		logger.info("On play resume achieved");
+
 	}
 }
