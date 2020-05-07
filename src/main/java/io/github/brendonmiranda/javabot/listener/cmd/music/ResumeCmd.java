@@ -14,21 +14,25 @@ import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener
  */
 public class ResumeCmd extends MusicCmd {
 
-    private static final Logger logger = LoggerFactory.getLogger(ResumeCmd.class);
+	private static final Logger logger = LoggerFactory.getLogger(ResumeCmd.class);
 
-    public ResumeCmd() {
-        this.name = "resume";
-        this.help = "resumes the current song";
-    }
+	public ResumeCmd() {
+		this.name = "resume";
+		this.help = "resumes the current song";
+	}
 
-    public void command(CommandEvent event) {
-        if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
-            AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager().getSendingHandler();
+	public void command(CommandEvent event) {
+		if (event.getArgs().isEmpty() && event.getMessage().getAttachments().isEmpty()) {
+			AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
+					.getSendingHandler();
 
-            if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null && audioSendHandler.getAudioPlayer().isPaused()) {
-                audioSendHandler.getAudioPlayer().setPaused(false);
-                event.replySuccess("Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
-            }
-        }
-    }
+			if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null
+					&& audioSendHandler.getAudioPlayer().isPaused()) {
+				audioSendHandler.getAudioPlayer().setPaused(false);
+				event.replySuccess(
+						"Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
+			}
+		}
+	}
+
 }

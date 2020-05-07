@@ -53,4 +53,5 @@ public class AudioEventListener extends AudioEventAdapter {
 	public void onPlayerResume(AudioPlayer player) {
 		logger.info("On play resume achieved");
 	}
+
 }

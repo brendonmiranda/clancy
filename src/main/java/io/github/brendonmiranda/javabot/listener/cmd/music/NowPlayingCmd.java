@@ -11,22 +11,25 @@ import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener
 
 public class NowPlayingCmd extends MusicCmd {
 
-    private static final Logger logger = LoggerFactory.getLogger(NowPlayingCmd.class);
+	private static final Logger logger = LoggerFactory.getLogger(NowPlayingCmd.class);
 
-    public NowPlayingCmd() {
-        this.name = "now";
-        this.help = "shows the song that is playing in the moment";
-    }
+	public NowPlayingCmd() {
+		this.name = "now";
+		this.help = "shows the song that is playing in the moment";
+	}
 
-    @Override
-    public void command(CommandEvent event)  {
-        AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager().getSendingHandler();
+	@Override
+	public void command(CommandEvent event) {
+		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
+				.getSendingHandler();
 
-        if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
-            AudioTrack audioTrack = audioSendHandler.getAudioPlayer().getPlayingTrack();
-           event.replySuccess("Now playing the track **" + audioTrack.getInfo().title + "**.");
-        } else {
-            event.replyWarning("Any track playing");
-        }
-    }
+		if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
+			AudioTrack audioTrack = audioSendHandler.getAudioPlayer().getPlayingTrack();
+			event.replySuccess("Now playing the track **" + audioTrack.getInfo().title + "**.");
+		}
+		else {
+			event.replyWarning("Any track playing");
+		}
+	}
+
 }
