@@ -1,0 +1,11 @@
+FROM openjdk:13-alpine
+MAINTAINER github.com/evelynsv
+
+ARG JAR_BASE_NAME=${JAR_BASE_NAME}
+ARG BUILD_VERSION=${BUILD_VERSION}
+ARG JAR_FILE=$JAR_BASE_NAME-$BUILD_VERSION.jar
+
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+EXPOSE 8080
