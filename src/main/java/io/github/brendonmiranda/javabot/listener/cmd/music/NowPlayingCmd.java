@@ -31,7 +31,7 @@ public class NowPlayingCmd extends MusicCmd {
 			event.replySuccess("Now playing the track **" + audioTrack.getInfo().title + "**.");
 		}
 		else {
-			event.replyWarning("Any track playing");
+			event.replyWarning("There is no track playing");
 		}
 	}
 

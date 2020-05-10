@@ -29,18 +29,20 @@ public class SkipCmd extends MusicCmd {
 
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
-		if (audioSendHandler != null && audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
+		AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
+		if (audioSendHandler != null && audioPlayer.getPlayingTrack() != null) {
 			if (!queue.isEmpty()) {
-				audioSendHandler.getAudioPlayer().stopTrack();
-				audioSendHandler.getAudioPlayer().playTrack(queue.get(0));
+				audioPlayer.stopTrack();
+				audioPlayer.playTrack(queue.get(0));
 				queue.remove(0);
+				event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
 			}
 			else {
 				event.replyWarning("Your queue is empty.");
 			}
 		}
 		else {
-			event.replyWarning("Any track playing");
+			event.replyWarning("There is no track playing.");
 		}
 	}
 

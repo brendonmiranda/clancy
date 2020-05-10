@@ -18,8 +18,9 @@ public class PauseCmd extends MusicCmd {
 				.getSendingHandler();
 
 		if (audioSendHandler.getAudioPlayer().isPaused()) {
-			event.replyWarning(
-					"The player is already paused! Type `" + event.getClient().getPrefix() + "resume` to unpause.");
+			audioSendHandler.getAudioPlayer().setPaused(false);
+			event.replySuccess(
+					"Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
 			return;
 		}
 

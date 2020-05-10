@@ -11,6 +11,7 @@ plugins {
 	id 'org.springframework.boot' version '2.2.6.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
+	id "com.palantir.docker" version "0.25.0"
 }
 
 apply plugin: 'io.spring.javaformat'
@@ -44,6 +45,12 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+}
+
+docker {
+	name "${project.group}/${bootJar.baseName}:$project.version"
+	copySpec.from("build/libs").into("/")
+	buildArgs([BUILD_VERSION: "$project.version",JAR_BASE_NAME: "${bootJar.baseName}"])
 }
 
 test {

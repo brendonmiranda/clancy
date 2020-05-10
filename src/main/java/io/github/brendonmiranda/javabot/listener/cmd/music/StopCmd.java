@@ -27,7 +27,7 @@ public class StopCmd extends MusicCmd {
 		event.getGuild().getAudioManager().closeAudioConnection();
 		queue.clear();
 
-		event.replySuccess("The player has stopped");
+		event.replySuccess("The player has stopped!");
 	}
 
 }
