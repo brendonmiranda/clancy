@@ -42,7 +42,7 @@ public class SkipCmd extends MusicCmd {
 			}
 		}
 		else {
-			event.replyWarning("Any track playing");
+			event.replyWarning("There is no track playing.");
 		}
 	}
 

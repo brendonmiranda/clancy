@@ -75,7 +75,8 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 			audioPlayer.playTrack(track);
 
 			event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
-		} else {
+		}
+		else {
 			AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
 
 			if (audioPlayer.getPlayingTrack() == null) {
@@ -84,14 +85,16 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
 				event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
 
-			} else {
+			}
+			else {
 
 				if (audioPlayer.isPaused()) {
-					event.replyWarning("The track **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
-							+ "** is paused. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+					event.replyWarning(
+							"The track **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
+									+ "** is paused. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
 				}
 				queue.add(track);
-				event.reply("The track has enqueued!");
+				event.reply("Enqueued **" + track.getInfo().title + "**.");
 			}
 		}
 	}
@@ -105,7 +108,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
 		if (playlist.isSearchResult()) {
 
-			builder.setText("Search results for *" + event.getArgs() + "*:").setSelection((msg, i) -> {
+			builder.setText("Search results for **" + event.getArgs() + "**:").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
 				queueTracks(audioTrack);
 			}).setCancel((msg) -> {
@@ -135,7 +138,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new AudioLoadResultHandlerImpl(audioPlayer,
 					event, audioPlayerManager, eventWaiter, message, Boolean.TRUE));
 		else
-			event.replyError("Sorry, we were unable to achieve your media. Please, rephrase and try again.");
+			event.replyError("Sorry, I couldn't find your track. Please, rephrase and try again.");
 	}
 
 	@Override

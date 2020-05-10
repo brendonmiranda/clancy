@@ -28,10 +28,10 @@ public class NowPlayingCmd extends MusicCmd {
 
 		if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
 			AudioTrack audioTrack = audioSendHandler.getAudioPlayer().getPlayingTrack();
-			event.replySuccess("Now playing the track *" + audioTrack.getInfo().title + "*.");
+			event.replySuccess("Now playing the track **" + audioTrack.getInfo().title + "**.");
 		}
 		else {
-			event.replyWarning("Any track playing");
+			event.replyWarning("There is no track playing");
 		}
 	}
 
