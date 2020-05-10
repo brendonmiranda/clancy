@@ -73,15 +73,26 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 		if (audioSendHandler == null) {
 			event.getGuild().getAudioManager().setSendingHandler(new AudioSendHandlerImpl(audioPlayer));
 			audioPlayer.playTrack(track);
-		}
-		else {
+
+			event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+		} else {
 			AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
 
-			if (audioPlayer.getPlayingTrack() == null)
-				audioPlayer.playTrack(track);
-			else
-				queue.add(track);
+			if (audioPlayer.getPlayingTrack() == null) {
 
+				audioPlayer.playTrack(track);
+
+				event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+
+			} else {
+
+				if (audioPlayer.isPaused()) {
+					event.replyWarning("The track **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
+							+ "** is paused. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+				}
+				queue.add(track);
+				event.reply("The track has enqueued!");
+			}
 		}
 	}
 
@@ -94,7 +105,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
 		if (playlist.isSearchResult()) {
 
-			builder.setText("Search results for " + event.getArgs() + " :").setSelection((msg, i) -> {
+			builder.setText("Search results for *" + event.getArgs() + "*:").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
 				queueTracks(audioTrack);
 			}).setCancel((msg) -> {
