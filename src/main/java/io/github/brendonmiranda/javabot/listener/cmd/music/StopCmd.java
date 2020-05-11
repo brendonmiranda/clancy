@@ -27,7 +27,7 @@ public class StopCmd extends MusicCmd {
 		if (audioSendHandler != null) {
 			audioSendHandler.getAudioPlayer().stopTrack();
 
-			//Pausing a song to not starts the new song paused
+			// Pausing a song to not starts the new song paused
 			if (audioSendHandler.getAudioPlayer().isPaused())
 				audioSendHandler.getAudioPlayer().setPaused(false);
 		}
