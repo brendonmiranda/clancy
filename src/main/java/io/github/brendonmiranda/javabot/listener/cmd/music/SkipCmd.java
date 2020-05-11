@@ -32,6 +32,10 @@ public class SkipCmd extends MusicCmd {
 		AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
 		if (audioSendHandler != null && audioPlayer.getPlayingTrack() != null) {
 			if (!queue.isEmpty()) {
+
+				if (audioPlayer.isPaused())
+					audioPlayer.setPaused(false);
+
 				audioPlayer.stopTrack();
 				audioPlayer.playTrack(queue.get(0));
 				queue.remove(0);
