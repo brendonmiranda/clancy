@@ -27,7 +27,7 @@ public class StopCmd extends MusicCmd {
 		if (audioSendHandler != null)
 			audioSendHandler.getAudioPlayer().stopTrack();
 
-			event.getGuild().getAudioManager().closeAudioConnection();
+		event.getGuild().getAudioManager().closeAudioConnection();
 
 		queue.clear();
 		event.replySuccess("The player has stopped!");
