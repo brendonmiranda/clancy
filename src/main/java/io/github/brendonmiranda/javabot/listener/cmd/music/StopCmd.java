@@ -1,6 +1,7 @@
 package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,10 +24,12 @@ public class StopCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
-		audioSendHandler.getAudioPlayer().stopTrack();
-		event.getGuild().getAudioManager().closeAudioConnection();
-		queue.clear();
+		if (audioSendHandler != null)
+			audioSendHandler.getAudioPlayer().stopTrack();
 
+			event.getGuild().getAudioManager().closeAudioConnection();
+
+		queue.clear();
 		event.replySuccess("The player has stopped!");
 	}
 

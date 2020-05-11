@@ -28,6 +28,7 @@ public class PlayCmd extends MusicCmd {
 		this.audioListener = audioListener;
 		this.eventWaiter = eventWaiter;
 		this.name = "play";
+		this.help = "plays or queue a song";
 	}
 
 	@Override
