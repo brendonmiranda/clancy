@@ -23,16 +23,18 @@ public class StopCmd extends MusicCmd {
 	public void command(CommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
-		AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
 
-		//Pausing a song to not starts the new song paused
-		if (audioPlayer.isPaused())
-			audioPlayer.setPaused(false);
+		if (audioSendHandler != null) {
+			audioSendHandler.getAudioPlayer().stopTrack();
 
-		audioPlayer.stopTrack();
+			//Pausing a song to not starts the new song paused
+			if (audioSendHandler.getAudioPlayer().isPaused())
+				audioSendHandler.getAudioPlayer().setPaused(false);
+		}
+
 		event.getGuild().getAudioManager().closeAudioConnection();
-		queue.clear();
 
+		queue.clear();
 		event.replySuccess("The player has stopped!");
 	}
 
