@@ -28,7 +28,7 @@ jobs:
       run: ./gradlew build
 
     - name: Docker Auth
-        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+      run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASS }}
 
     - name: Docker Publish
       run: ./gradlew dockerPushDockerHub
