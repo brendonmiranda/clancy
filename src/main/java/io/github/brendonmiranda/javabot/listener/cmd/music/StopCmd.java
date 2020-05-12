@@ -24,8 +24,13 @@ public class StopCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
-		if (audioSendHandler != null)
+		if (audioSendHandler != null) {
 			audioSendHandler.getAudioPlayer().stopTrack();
+
+			// Pausing a song to not starts the new song paused
+			if (audioSendHandler.getAudioPlayer().isPaused())
+				audioSendHandler.getAudioPlayer().setPaused(false);
+		}
 
 		event.getGuild().getAudioManager().closeAudioConnection();
 
