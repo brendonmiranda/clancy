@@ -32,3 +32,18 @@ jobs:
 
     - name: Docker Publish
       run: ./gradlew dockerPushDockerHub
+
+    - name: Docker pull
+      run: docker pull evelynvieira/discordjavabot:0.0.1-SNAPSHOT
+
+    - name: Heroku login
+      run: docker login --username=_ --password=${{ secrets.HEROKU_KEY }} registry.heroku.com
+
+    - name: Heroku tag
+      run: docker tag evelynvieira/discordjavabot:0.0.1-SNAPSHOT registry.heroku.com/doze-bot/worker
+
+    - name: Heroku push
+      run: docker push registry.heroku.com/doze-bot/worker
+
+    - name: Heroku release
+      run: heroku container:release worker -a doze-bot
