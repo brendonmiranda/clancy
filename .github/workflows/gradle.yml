@@ -46,7 +46,7 @@ jobs:
       run: docker push registry.heroku.com/doze-bot/worker
 
     - name: Heroku auth
-      run: heroku login
+      run: heroku container:login
 
     - name: Heroku release
       run: heroku container:release worker -a doze-bot
