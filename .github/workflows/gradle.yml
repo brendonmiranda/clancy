@@ -27,28 +27,31 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
 
-    - name: Docker Auth
+    - name: Docker Login on DockerHub
       run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASS }}
 
-    - name: Docker Publish
+    - name: Docker Publish on DockerHub
       run: ./gradlew dockerPushDockerHub
 
-    - name: Docker pull
+    - name: Docker pull published image
       run: docker pull evelynvieira/discordjavabot:0.0.1-SNAPSHOT
 
-    - name: Heroku login
+    - name: Docker Login on Heroku
       run: docker login --username=_ --password=${{ secrets.HEROKU_KEY }} registry.heroku.com
 
-    - name: Heroku tag
+    - name: Docker tag on Heroku
       run: docker tag evelynvieira/discordjavabot:0.0.1-SNAPSHOT registry.heroku.com/doze-bot/worker
 
-    - name: Heroku push
+    - name: Docker push on Heroku
       run: docker push registry.heroku.com/doze-bot/worker
+      
+    - name: Heroku auth file
+      run: echo "${{ secrets.HEROKU_AUTH }}" > ~/.netrc
 
-    - name: Heroku auth
+    - name: Heroku container login
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_KEY }}
       run: heroku container:login
 
-    - name: Heroku release
+    - name: Heroku container release
       run: heroku container:release worker -a doze-bot
