@@ -46,6 +46,8 @@ jobs:
       run: docker push registry.heroku.com/doze-bot/worker
 
     - name: Heroku auth
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_KEY }}
       run: heroku container:login
 
     - name: Heroku release
