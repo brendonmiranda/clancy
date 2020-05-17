@@ -51,6 +51,7 @@ docker {
 	name "${project.group}/${bootJar.baseName}:$project.version"
 	tag "DockerHub", "evelynvieira/${bootJar.baseName}:$project.version"
 	copySpec.from("build/libs").into("/")
+	copySpec.from("start.sh").into("/")
 	buildArgs([BUILD_VERSION: "$project.version",JAR_BASE_NAME: "${bootJar.baseName}"])
 }
 
