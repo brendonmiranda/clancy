@@ -10,3 +10,5 @@ COPY ${JAR_FILE} app.jar
 COPY ${START_SCRIPT} start.sh
 
 ENTRYPOINT ["./start.sh"]
+
+CMD ["${BOT_OWNER}", "${BOT_TOKEN}", "${BOT_PREFIX}"]
