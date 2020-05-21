@@ -29,13 +29,13 @@ jobs:
       run: ./gradlew dockerPushDockerHub
 
     - name: Docker pull published image
-      run: docker pull evelynvieira/dozeapp:0.0.1-SNAPSHOT
+      run: docker pull evelynvieira/dozeapp:1.0.0
 
     - name: Docker Login on Heroku
       run: docker login --username=_ --password=${{ secrets.PREPROD_HEROKU_KEY }} registry.heroku.com
 
     - name: Docker tag on Heroku
-      run: docker tag evelynvieira/dozeapp:0.0.1-SNAPSHOT registry.heroku.com/dozeapp-heroku-preprod/worker
+      run: docker tag evelynvieira/dozeapp:1.0.0 registry.heroku.com/dozeapp-heroku-preprod/worker
 
     - name: Docker push on Heroku
       run: docker push registry.heroku.com/dozeapp-heroku-preprod/worker
