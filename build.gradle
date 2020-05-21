@@ -17,7 +17,7 @@ plugins {
 apply plugin: 'io.spring.javaformat'
 
 group = 'io.github.brendonmiranda'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '13'
 
 configurations {
@@ -49,7 +49,9 @@ dependencies {
 
 docker {
 	name "${project.group}/${bootJar.baseName}:$project.version"
+	tag "DockerHub", "evelynvieira/${bootJar.baseName}:$project.version"
 	copySpec.from("build/libs").into("/")
+	copySpec.from("start.sh").into("/")
 	buildArgs([BUILD_VERSION: "$project.version",JAR_BASE_NAME: "${bootJar.baseName}"])
 }
 

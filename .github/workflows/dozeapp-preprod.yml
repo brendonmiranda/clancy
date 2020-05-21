@@ -1,0 +1,50 @@
+name: Doze App CD PRE PROD
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 13
+      uses: actions/setup-java@v1
+      with:
+        java-version: 13
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build with Gradle
+      run: ./gradlew build
+
+    - name: Docker Login on DockerHub
+      run: docker login -u ${{ secrets.DOCKER_HUB_USER }} -p ${{ secrets.DOCKER_HUB_PASS }}
+
+    - name: Docker Publish on DockerHub
+      run: ./gradlew dockerPushDockerHub
+
+    - name: Docker pull published image
+      run: docker pull evelynvieira/dozeapp:1.0.0
+
+    - name: Docker Login on Heroku
+      run: docker login --username=_ --password=${{ secrets.PREPROD_HEROKU_KEY }} registry.heroku.com
+
+    - name: Docker tag on Heroku
+      run: docker tag evelynvieira/dozeapp:1.0.0 registry.heroku.com/dozeapp-heroku-preprod/worker
+
+    - name: Docker push on Heroku
+      run: docker push registry.heroku.com/dozeapp-heroku-preprod/worker
+      
+    - name: Heroku auth file
+      run: echo "${{ secrets.PREPROD_HEROKU_AUTH }}" > ~/.netrc
+
+    - name: Heroku container login
+      run: heroku container:login
+
+    - name: Heroku container release
+      run: heroku container:release worker -a dozeapp-heroku-preprod
