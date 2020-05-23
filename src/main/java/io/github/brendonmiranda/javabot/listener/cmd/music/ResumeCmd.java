@@ -26,7 +26,7 @@ public class ResumeCmd extends MusicCmd {
 			AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 					.getSendingHandler();
 
-			if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null
+			if (audioSendHandler != null && audioSendHandler.getAudioPlayer().getPlayingTrack() != null
 					&& audioSendHandler.getAudioPlayer().isPaused()) {
 				audioSendHandler.getAudioPlayer().setPaused(false);
 				event.replySuccess(
