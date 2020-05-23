@@ -25,7 +25,7 @@ public class PauseCmd extends MusicCmd {
 			return;
 		}
 
-		if(audioSendHandler != null && audioSendHandler.getAudioPlayer().getPlayingTrack() != null){
+		if (audioSendHandler != null && audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
 			audioSendHandler.getAudioPlayer().setPaused(true);
 			event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
 					+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");

@@ -72,10 +72,10 @@ public class AudioEventListener extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs, StackTraceElement[] stackTrace) {
-		//todo: throws a custom exception
+		// todo: throws a custom exception
 	}
 
-	private void setActivity(ActivityType activityType, String value){
+	private void setActivity(ActivityType activityType, String value) {
 		jda.getPresence().setActivity(Activity.of(activityType, value));
 	}
 

@@ -30,6 +30,7 @@ public class BotConfiguration {
 	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
 
 	public static final String DEFAULT_ACTIVITY_VALUE = "you";
+
 	public static final ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType.LISTENING;
 
 	@Value("${token}")
@@ -52,8 +53,7 @@ public class BotConfiguration {
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(jda),
 						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
-				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE))
-				.build();
+				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
 		jda.addEventListener(cmdListener, eventWaiter);
 
