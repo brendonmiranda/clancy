@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.cmd.music.*;
+import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.slf4j.Logger;
@@ -37,12 +38,12 @@ public class BotConfiguration {
 
 	@Bean
 	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener,
-			EventWaiter eventWaiter) throws LoginException {
+					EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
 		logger.debug("Configuring Java Discord Api");
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(),
-						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd(), new JoinCmd())
+						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
 				.build();
 
 		// todo : implement settings discord

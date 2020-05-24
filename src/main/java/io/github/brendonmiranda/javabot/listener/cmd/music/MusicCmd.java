@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.managers.AudioManager;
  */
 public abstract class MusicCmd extends Command {
 
+	protected VoiceChannel voiceChannel;
+
 	public MusicCmd() {
 		this.guildOnly = true;
 		this.category = new Category("Music");
@@ -17,15 +19,16 @@ public abstract class MusicCmd extends Command {
 
 	@Override
 	protected void execute(CommandEvent event) {
-		VoiceChannel voiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+		this.voiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
 
-		if (voiceChannel == null) {
+		if (this.voiceChannel == null) {
 			event.replyError("You must be in a voice channel.");
 			return;
 		}
 
-		AudioManager audioManager = event.getGuild().getAudioManager();
-		audioManager.openAudioConnection(voiceChannel);
+		// todo: move it to joinCmd and deal with it
+//		AudioManager audioManager = event.getGuild().getAudioManager();
+//		audioManager.openAudioConnection(voiceChannel);
 		command(event);
 	}
 
