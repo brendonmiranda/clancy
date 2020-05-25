@@ -5,8 +5,11 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,6 +24,9 @@ import java.util.List;
 public class AudioEventListener extends AudioEventAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(AudioEventListener.class);
+
+	@Autowired
+	private LifeCycleService lifeCycleService;
 
 	public static List<AudioTrack> queue = new ArrayList<>();
 
@@ -41,7 +47,12 @@ public class AudioEventListener extends AudioEventAdapter {
 		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
 			player.playTrack(queue.get(0));
 			queue.remove(0);
+			return;
+		}else {
+			lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
 		}
+
+
 	}
 
 	@Override

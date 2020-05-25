@@ -13,6 +13,7 @@ public class PauseCmd extends MusicCmd {
 		this.help = "pauses the current song";
 	}
 
+	// todo: set inactivity task here as well
 	public void command(CommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
