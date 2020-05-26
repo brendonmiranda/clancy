@@ -20,7 +20,7 @@ public class LifeCycleService {
     private static final Logger logger = LoggerFactory.getLogger(LifeCycleService.class);
 
     @Value("${bot.inactivity.time}")
-    private long inactivityTime;
+    private long botInactivityTime;
 
     /**
      * Schedules task to disconnect inactive bot
@@ -30,7 +30,6 @@ public class LifeCycleService {
         // todo change loggers to debug
         logger.info("DisconnectByInactivity task scheduled. Guild: {}", guild.getName());
 
-
         Timer timer = new Timer(guild.getName());
         TimerTask disconnectByInactivityTask = new TimerTask() {
             public void run() {
@@ -38,6 +37,7 @@ public class LifeCycleService {
                 AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) audioManager.getSendingHandler();
 
                 if(audioSendHandler == null || audioSendHandler.getAudioPlayer().getPlayingTrack() == null
+                        || audioSendHandler.getAudioPlayer().isPaused()
                         || (audioManager.getConnectedChannel() != null && audioManager.getConnectedChannel().getMembers().size() == 1)){
 
                     logger.info("Disconnected by inactivity. Guild: {}", guild.getName());
@@ -47,7 +47,7 @@ public class LifeCycleService {
             }
         };
 
-        timer.schedule(disconnectByInactivityTask, inactivityTime);
+        timer.schedule(disconnectByInactivityTask, botInactivityTime);
     }
 
 }
