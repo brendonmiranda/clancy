@@ -33,14 +33,14 @@ public class PlayCmd extends MusicCmd {
 
 	@Override
 	public void command(CommandEvent event) {
-		logger.info("Play command loading track: {}", event.getArgs());
+		logger.debug("PlayCmd loading track: {}", event.getArgs());
 
 		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
 		audioPlayer.addListener(audioListener);
 
 		event.reply("Searching...", (message) -> {
 			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new AudioLoadResultHandlerImpl(
-					audioPlayer, event, audioPlayerManager, eventWaiter, message, Boolean.FALSE));
+					audioPlayer, event, audioPlayerManager, eventWaiter, message, false));
 		});
 
 	}

@@ -25,16 +25,19 @@ public class PauseCmd extends MusicCmd {
 			return;
 
 		if (audioSendHandler.getAudioPlayer().isPaused()) {
+			// todo: instantiate ResumeCmd and use it instead
 			audioSendHandler.getAudioPlayer().setPaused(false);
 			event.replySuccess(
 					"Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
 			return;
 		}
 
-		audioSendHandler.getAudioPlayer().setPaused(true);
-		lifeCycleService.scheduleDisconnectByInactivityTask(event.getGuild());
-		event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
-				+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+		if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
+			audioSendHandler.getAudioPlayer().setPaused(true);
+			lifeCycleService.scheduleDisconnectByInactivityTask(event.getGuild());
+			event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
+					+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+		}
 	}
 
 }

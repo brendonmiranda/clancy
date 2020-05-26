@@ -114,6 +114,7 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 	@Override
 	public void playlistLoaded(final AudioPlaylist playlist) {
 
+		// todo: log playlist loaded
 		if (playlist.isSearchResult()) {
 
 			builder.setText("Search results for **" + event.getArgs() + "**:").setSelection((msg, i) -> {

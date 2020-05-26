@@ -19,6 +19,9 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
+import static net.dv8tion.jda.api.entities.Activity.ActivityType;
+import static net.dv8tion.jda.api.entities.Activity.of;
+
 /**
  * @author brendonmiranda
  */
@@ -26,6 +29,10 @@ import javax.security.auth.login.LoginException;
 public class BotConfiguration {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
+
+	public static final String DEFAULT_ACTIVITY_VALUE = "you";
+
+	public static final ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType.LISTENING;
 
 	@Value("${token}")
 	private String token;
@@ -41,14 +48,14 @@ public class BotConfiguration {
 			EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
 		logger.debug("Configuring Java Discord Api");
 
-		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(),
-						new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(), new QueueCmd(),
-						new NowPlayingCmd(), new JoinCmd(lifeCycleService))
-				.build();
-
 		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
+
+		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
+				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(jda),
+						new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(), new QueueCmd(),
+						new NowPlayingCmd(), new JoinCmd(lifeCycleService))
+				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
 		jda.addEventListener(cmdListener, eventWaiter);
 
