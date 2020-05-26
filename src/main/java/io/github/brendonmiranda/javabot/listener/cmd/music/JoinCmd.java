@@ -12,32 +12,44 @@ import org.slf4j.LoggerFactory;
 /**
  * @author brendonmiranda
  */
-public class JoinCmd extends Command {
+public class JoinCmd extends MusicCmd {
 
-    private static final Logger logger = LoggerFactory.getLogger(JoinCmd.class);
+	private static final Logger logger = LoggerFactory.getLogger(JoinCmd.class);
 
-    private final LifeCycleService lifeCycleService;
+	private final LifeCycleService lifeCycleService;
 
-    public JoinCmd(LifeCycleService lifeCycleService) {
-        this.name = "join";
-        this.help = "joins you on the channel";
-        this.lifeCycleService = lifeCycleService; // todo: inject it
-    }
+	public JoinCmd(LifeCycleService lifeCycleService) {
+		this.name = "join";
+		this.help = "joins you on the channel";
+		this.lifeCycleService = lifeCycleService; // todo: inject it
+	}
 
-    @Override
-    protected void execute(CommandEvent event) {
+	/**
+	 * It was overrode in order to avoid validations from MusicCmd which must not be
+	 * applied to JoinCmd.
+	 * @param event
+	 */
+	@Override
+	public void execute(CommandEvent event) {
+		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
 
-        VoiceChannel voiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+		// It validates if the member who trigger the event is present in a voice channel.
+		if (memberVoiceChannel == null) {
+			event.replyError("You must be in a voice channel.");
+			return;
+		}
 
-        if (voiceChannel == null) {
-            event.replyError("You must be in a voice channel.");
-            return;
-        }
+		command(event);
+	}
 
-        Guild guild = event.getGuild();
-        AudioManager audioManager = guild.getAudioManager();
-        audioManager.openAudioConnection(voiceChannel);
+	@Override
+	public void command(CommandEvent event) {
+		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+		Guild guild = event.getGuild();
+		AudioManager audioManager = guild.getAudioManager();
 
-        lifeCycleService.scheduleDisconnectByInactivityTask(guild);
-    }
+		audioManager.openAudioConnection(memberVoiceChannel);
+		lifeCycleService.scheduleDisconnectByInactivityTask(guild);
+	}
+
 }

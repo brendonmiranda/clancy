@@ -48,10 +48,10 @@ public class AudioEventListener extends AudioEventAdapter {
 			player.playTrack(queue.get(0));
 			queue.remove(0);
 			return;
-		}else {
+		}
+		else {
 			lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
 		}
-
 
 	}
 

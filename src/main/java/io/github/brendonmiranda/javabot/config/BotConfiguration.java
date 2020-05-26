@@ -38,12 +38,13 @@ public class BotConfiguration {
 
 	@Bean
 	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener,
-					EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
+			EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
 		logger.debug("Configuring Java Discord Api");
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(),
-						new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
+						new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(), new QueueCmd(),
+						new NowPlayingCmd(), new JoinCmd(lifeCycleService))
 				.build();
 
 		// todo : implement settings discord

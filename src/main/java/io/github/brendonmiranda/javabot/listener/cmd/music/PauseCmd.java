@@ -21,7 +21,7 @@ public class PauseCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
-		if(audioSendHandler == null)
+		if (audioSendHandler == null)
 			return;
 
 		if (audioSendHandler.getAudioPlayer().isPaused()) {

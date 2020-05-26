@@ -17,37 +17,35 @@ import java.util.TimerTask;
 @Service
 public class LifeCycleService {
 
-    private static final Logger logger = LoggerFactory.getLogger(LifeCycleService.class);
+	private static final Logger logger = LoggerFactory.getLogger(LifeCycleService.class);
 
-    @Value("${bot.inactivity.time}")
-    private long botInactivityTime;
+	@Value("${bot.inactivity.time}")
+	private long botInactivityTime;
 
-    /**
-     * Schedules task to disconnect inactive bot
-     * @param guild
-     */
-    public void scheduleDisconnectByInactivityTask(Guild guild){
-        // todo change loggers to debug
-        logger.info("DisconnectByInactivity task scheduled. Guild: {}", guild.getName());
+	/**
+	 * Schedules task to disconnect inactive bot
+	 * @param guild
+	 */
+	public void scheduleDisconnectByInactivityTask(Guild guild) {
+		logger.debug("DisconnectByInactivity task scheduled. Guild: {}", guild.getName());
 
-        Timer timer = new Timer(guild.getName());
-        TimerTask disconnectByInactivityTask = new TimerTask() {
-            public void run() {
-                AudioManager audioManager = guild.getAudioManager();
-                AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) audioManager.getSendingHandler();
+		Timer timer = new Timer(guild.getName());
+		TimerTask disconnectByInactivityTask = new TimerTask() {
+			public void run() {
+				AudioManager audioManager = guild.getAudioManager();
+				AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) audioManager.getSendingHandler();
 
-                if(audioSendHandler == null || audioSendHandler.getAudioPlayer().getPlayingTrack() == null
-                        || audioSendHandler.getAudioPlayer().isPaused()
-                        || (audioManager.getConnectedChannel() != null && audioManager.getConnectedChannel().getMembers().size() == 1)){
+				if (audioSendHandler == null || audioSendHandler.getAudioPlayer().getPlayingTrack() == null
+						|| audioSendHandler.getAudioPlayer().isPaused() || (audioManager.getConnectedChannel() != null
+								&& audioManager.getConnectedChannel().getMembers().size() == 1)) {
 
-                    logger.info("Disconnected by inactivity. Guild: {}", guild.getName());
-                    audioManager.closeAudioConnection();
-                }
+					logger.debug("Disconnected by inactivity. Guild: {}", guild.getName());
+					audioManager.closeAudioConnection();
+				}
+			}
+		};
 
-            }
-        };
-
-        timer.schedule(disconnectByInactivityTask, botInactivityTime);
-    }
+		timer.schedule(disconnectByInactivityTask, botInactivityTime);
+	}
 
 }
