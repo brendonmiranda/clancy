@@ -67,9 +67,12 @@ public class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 	 * @param track audio track
 	 */
 	public void queueTracks(AudioTrack track) {
-		track.setUserData(event.getGuild()); // object to be recovered when necessary
-												// (Guild). Currently it is being used on
-												// AudioEventListener
+
+		/*
+		 * Object (Guild) to be recovered when necessary. Currently it is being used on
+		 * AudioEventListener
+		 */
+		track.setUserData(event.getGuild());
 
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();

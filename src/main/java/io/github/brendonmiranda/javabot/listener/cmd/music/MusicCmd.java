@@ -21,7 +21,7 @@ public abstract class MusicCmd extends Command {
 		AudioManager audioManager = event.getGuild().getAudioManager();
 		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
 
-		/**
+		/*
 		 * To execute any music command the bot needs to be in a voice channel. It
 		 * validates this. A voice channel is achieved by the bot through Join command.
 		 */
@@ -30,7 +30,7 @@ public abstract class MusicCmd extends Command {
 			return;
 		}
 
-		/**
+		/*
 		 * It validates if the member who trigger the event is present in a voice channel.
 		 */
 		if (memberVoiceChannel == null) {
