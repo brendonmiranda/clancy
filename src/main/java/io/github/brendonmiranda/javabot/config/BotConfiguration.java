@@ -10,6 +10,7 @@ import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.cmd.music.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
+import static net.dv8tion.jda.api.entities.Activity.*;
+
 /**
  * @author brendonmiranda
  */
@@ -25,6 +28,10 @@ import javax.security.auth.login.LoginException;
 public class BotConfiguration {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
+
+	public static final String DEFAULT_ACTIVITY_VALUE = "you";
+
+	public static final ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType.LISTENING;
 
 	@Value("${token}")
 	private String token;
@@ -40,13 +47,13 @@ public class BotConfiguration {
 			EventWaiter eventWaiter) throws LoginException {
 		logger.debug("Configuring Java Discord Api");
 
-		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(),
-						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
-				.build();
-
 		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
+
+		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
+				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(jda),
+						new PauseCmd(), new ResumeCmd(), new SkipCmd(), new QueueCmd(), new NowPlayingCmd())
+				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
 		jda.addEventListener(cmdListener, eventWaiter);
 

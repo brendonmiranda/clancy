@@ -17,16 +17,19 @@ public class PauseCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
 				.getSendingHandler();
 
-		if (audioSendHandler.getAudioPlayer().isPaused()) {
+		if (audioSendHandler != null && audioSendHandler.getAudioPlayer().isPaused()) {
+			// todo: instantiate ResumeCmd and use it instead
 			audioSendHandler.getAudioPlayer().setPaused(false);
 			event.replySuccess(
 					"Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
 			return;
 		}
 
-		audioSendHandler.getAudioPlayer().setPaused(true);
-		event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
-				+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+		if (audioSendHandler != null && audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
+			audioSendHandler.getAudioPlayer().setPaused(true);
+			event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
+					+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+		}
 	}
 
 }
