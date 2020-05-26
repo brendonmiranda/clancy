@@ -11,4 +11,4 @@ COPY ${START_SCRIPT} start.sh
 
 ENTRYPOINT ["./start.sh"]
 
-CMD ["${BOT_OWNER}", "${BOT_TOKEN}", "${BOT_PREFIX}"]
+CMD ["${BOT_OWNER}", "${BOT_TOKEN}", "${BOT_PREFIX}", "${BOT_INACTIVITY_TIME}"]
