@@ -19,7 +19,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
-import static net.dv8tion.jda.api.entities.Activity.ActivityType;
+import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_TYPE;
+import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_VALUE;
 import static net.dv8tion.jda.api.entities.Activity.of;
 
 /**
@@ -29,10 +30,6 @@ import static net.dv8tion.jda.api.entities.Activity.of;
 public class BotConfiguration {
 
 	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
-
-	public static final String DEFAULT_ACTIVITY_VALUE = "you";
-
-	public static final ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType.LISTENING;
 
 	@Value("${token}")
 	private String token;
@@ -52,9 +49,9 @@ public class BotConfiguration {
 		JDA jda = JDABuilder.createDefault(token).build();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter), new StopCmd(jda),
-						new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(), new QueueCmd(),
-						new NowPlayingCmd(), new JoinCmd(lifeCycleService))
+				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter),
+						new StopCmd(jda, lifeCycleService), new PauseCmd(lifeCycleService), new ResumeCmd(),
+						new SkipCmd(), new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
 		jda.addEventListener(cmdListener, eventWaiter);

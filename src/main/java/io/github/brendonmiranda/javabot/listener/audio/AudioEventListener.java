@@ -7,8 +7,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Activity.ActivityType;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.brendonmiranda.javabot.config.BotConfiguration.DEFAULT_ACTIVITY_VALUE;
 import static net.dv8tion.jda.api.entities.Activity.ActivityType.LISTENING;
 
 /**
@@ -45,7 +42,7 @@ public class AudioEventListener extends AudioEventAdapter {
 		logger.info("Track has started. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		setActivity(LISTENING, audioTrackInfo.title);
+		lifeCycleService.setActivity(LISTENING, audioTrackInfo.title);
 	}
 
 	@Override
@@ -58,12 +55,12 @@ public class AudioEventListener extends AudioEventAdapter {
 		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
 			player.playTrack(queue.get(0));
 			queue.remove(0);
-			setActivity(LISTENING, audioTrackInfo.title);
+			lifeCycleService.setActivity(LISTENING, audioTrackInfo.title);
 			return;
 		}
 
 		lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
-		setActivity(LISTENING, DEFAULT_ACTIVITY_VALUE);
+		lifeCycleService.setActivityDefault();
 	}
 
 	@Override
@@ -78,11 +75,10 @@ public class AudioEventListener extends AudioEventAdapter {
 
 	@Override
 	public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs, StackTraceElement[] stackTrace) {
+		AudioTrackInfo audioTrackInfo = track.getInfo();
+		logger.info("Track got stuck. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
+				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 		// todo: throws a custom exception
-	}
-
-	private void setActivity(ActivityType activityType, String value) {
-		jda.getPresence().setActivity(Activity.of(activityType, value));
 	}
 
 }
