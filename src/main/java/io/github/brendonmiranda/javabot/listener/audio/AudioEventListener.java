@@ -31,9 +31,6 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Autowired
 	private LifeCycleService lifeCycleService;
 
-	@Autowired
-	private JDA jda;
-
 	public static List<AudioTrack> queue = new ArrayList<>();
 
 	@Override
@@ -42,7 +39,7 @@ public class AudioEventListener extends AudioEventAdapter {
 		logger.info("Track has started. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		lifeCycleService.setActivity(LISTENING, audioTrackInfo.title);
+		lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 	}
 
 	@Override
@@ -55,12 +52,12 @@ public class AudioEventListener extends AudioEventAdapter {
 		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
 			player.playTrack(queue.get(0));
 			queue.remove(0);
-			lifeCycleService.setActivity(LISTENING, audioTrackInfo.title);
+			lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 			return;
 		}
 
 		lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
-		lifeCycleService.setActivityDefault();
+		lifeCycleService.setActivityDefault(((Guild) track.getUserData()).getJDA());
 	}
 
 	@Override

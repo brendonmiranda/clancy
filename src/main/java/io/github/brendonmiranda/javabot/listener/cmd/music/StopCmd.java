@@ -16,12 +16,9 @@ public class StopCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
-	private final JDA jda;
-
 	private final LifeCycleService lifeCycleService;
 
-	public StopCmd(JDA jda, LifeCycleService lifeCycleService) {
-		this.jda = jda;
+	public StopCmd(LifeCycleService lifeCycleService) {
 		this.lifeCycleService = lifeCycleService;
 		this.name = "stop";
 		this.help = "stops the current song";
@@ -45,7 +42,7 @@ public class StopCmd extends MusicCmd {
 
 		event.replySuccess("The player has stopped!");
 
-		lifeCycleService.setActivityDefault();
+		lifeCycleService.setActivityDefault(event.getJDA());
 	}
 
 }

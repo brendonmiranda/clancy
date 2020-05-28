@@ -31,9 +31,6 @@ public class LifeCycleService {
 	@Value("${bot.inactivity.time}")
 	private long botInactivityTime;
 
-	@Autowired
-	private JDA jda;
-
 	/**
 	 * Schedules task to disconnect inactive bot
 	 * @param guild guild where trigger the task
@@ -63,7 +60,7 @@ public class LifeCycleService {
 					// same behavior from stop cmd
 					audioManager.closeAudioConnection();
 					queue.clear();
-					setActivityDefault();
+					setActivityDefault(guild.getJDA());
 				}
 			}
 		};
@@ -76,14 +73,14 @@ public class LifeCycleService {
 	 * @param activityType activity type
 	 * @param value value
 	 */
-	public void setActivity(Activity.ActivityType activityType, String value) {
+	public void setActivity(JDA jda, Activity.ActivityType activityType, String value) {
 		jda.getPresence().setActivity(Activity.of(activityType, value));
 	}
 
 	/**
 	 * Sets the default activity
 	 */
-	public void setActivityDefault() {
+	public void setActivityDefault(JDA jda) {
 		jda.getPresence().setActivity(Activity.of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE));
 	}
 
