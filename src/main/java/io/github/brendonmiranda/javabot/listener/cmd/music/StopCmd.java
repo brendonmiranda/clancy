@@ -1,8 +1,10 @@
 package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +17,24 @@ public class StopCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
-	public StopCmd() {
+	private final LifeCycleService lifeCycleService;
+
+	public StopCmd(LifeCycleService lifeCycleService) {
+		this.lifeCycleService = lifeCycleService;
 		this.name = "stop";
 		this.help = "stops the current song";
 	}
 
 	public void command(CommandEvent event) {
-		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
-				.getSendingHandler();
+
+		stop(event.getGuild());
+
+		event.replySuccess("The player has stopped!");
+		lifeCycleService.setActivityDefault(event.getJDA());
+	}
+
+	public static void stop(Guild guild) {
+		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
 
 		if (audioSendHandler != null) {
 			audioSendHandler.getAudioPlayer().stopTrack();
@@ -32,10 +44,8 @@ public class StopCmd extends MusicCmd {
 				audioSendHandler.getAudioPlayer().setPaused(false);
 		}
 
-		event.getGuild().getAudioManager().closeAudioConnection();
-
+		guild.getAudioManager().closeAudioConnection();
 		queue.clear();
-		event.replySuccess("The player has stopped!");
 	}
 
 }
