@@ -31,7 +31,8 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Autowired
 	private LifeCycleService lifeCycleService;
 
-	public static List<AudioTrack> queue = new ArrayList<>();
+	// todo: a queue of tracks must be implemented properly by guild in order to scale it
+	public final static List<AudioTrack> queue = new ArrayList<>();
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {

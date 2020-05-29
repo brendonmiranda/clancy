@@ -1,20 +1,20 @@
 package io.github.brendonmiranda.javabot.service;
 
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.listener.cmd.music.StopCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
 /**
  * @author brendonmiranda
@@ -27,6 +27,9 @@ public class LifeCycleService {
 	public static final String DEFAULT_ACTIVITY_VALUE = "você";
 
 	public static final Activity.ActivityType DEFAULT_ACTIVITY_TYPE = Activity.ActivityType.LISTENING;
+
+	// todo: a queue of tasks must be implemented properly by guild in order to scale it
+	public static final List<TimerTask> timerTasksQueue = new ArrayList<>();
 
 	@Value("${bot.inactivity.time}")
 	private long botInactivityTime;
@@ -58,14 +61,14 @@ public class LifeCycleService {
 					logger.info("Disconnected by inactivity. Guild: {}", guild.getName());
 
 					// same behavior from stop cmd
-					audioManager.closeAudioConnection();
-					queue.clear();
+					StopCmd.stop(guild);
 					setActivityDefault(guild.getJDA());
 				}
 			}
 		};
 
 		timer.schedule(disconnectByInactivityTask, botInactivityTime);
+		timerTasksQueue.add(disconnectByInactivityTask);
 	}
 
 	/**
