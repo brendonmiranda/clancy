@@ -27,9 +27,9 @@ import static net.dv8tion.jda.api.entities.Activity.of;
  * @author brendonmiranda
  */
 @Configuration
-public class BotConfiguration {
+public class JDAConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
+	private static final Logger logger = LoggerFactory.getLogger(JDAConfiguration.class);
 
 	@Value("${token}")
 	private String token;
@@ -41,15 +41,14 @@ public class BotConfiguration {
 	private Long owner;
 
 	@Bean
-	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener,
-			EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
-		logger.debug("Configuring Java Discord Api");
+	public JDA load(AudioEventListener audioEventListener, LifeCycleService lifeCycleService) throws LoginException {
 
 		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
+		EventWaiter eventWaiter = eventWaiter();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter),
+				.addCommands(new PlayCmd(audioPlayerManager(), audioEventListener, eventWaiter),
 						new StopCmd(lifeCycleService), new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(),
 						new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
