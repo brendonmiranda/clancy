@@ -23,6 +23,17 @@ public class AudioQueueService {
 		// todo: to implement a else in case of there is no queue
 	}
 
+	public AudioTrack receive(String queueName){
+		Object object = rabbitTemplate.receiveAndConvert(queueName);
+
+		if(object != null && object instanceof AudioTrack){
+			AudioTrack audioTrack = (AudioTrack) object;
+			return audioTrack;
+		}
+
+		return null;
+	}
+
 	/**
 	 * Checks if a queue exists. If the queue doesn't exist it tries to create it.
 	 * @param queueName
