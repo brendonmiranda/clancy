@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.cmd.music.*;
+import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -41,14 +42,15 @@ public class JDAConfiguration {
 	private Long owner;
 
 	@Bean
-	public JDA load(AudioEventListener audioEventListener, LifeCycleService lifeCycleService) throws LoginException {
+	public JDA load(AudioEventListener audioEventListener, LifeCycleService lifeCycleService,
+			AudioQueueService audioQueueService) throws LoginException {
 
 		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
 		EventWaiter eventWaiter = eventWaiter();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager(), audioEventListener, eventWaiter),
+				.addCommands(new PlayCmd(audioPlayerManager(), audioEventListener, audioQueueService, eventWaiter),
 						new StopCmd(lifeCycleService), new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(),
 						new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();

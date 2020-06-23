@@ -40,7 +40,6 @@ public class RabbitConfiguration {
 	 */
 	@Bean
 	public RabbitAdmin rabbitAdmin() {
-		// public AmqpAdmin amqpAdmin() {
 		return new RabbitAdmin(connectionFactory());
 	}
 
@@ -52,8 +51,7 @@ public class RabbitConfiguration {
 	}
 
 	/**
-	 * The converter in configured RabbitTemplate to override its usage of the
-	 * SimpleMessageConverter default.
+	 * Message converter to override the usage of the SimpleMessageConverter default.
 	 */
 	@Bean
 	public Jackson2JsonMessageConverter jsonMessageConverter() {

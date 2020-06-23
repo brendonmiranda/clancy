@@ -1,6 +1,8 @@
 package io.github.brendonmiranda.javabot.service;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
+import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -16,19 +18,21 @@ public class AudioQueueService {
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 
+	@Autowired
+	private AudioTrackToAudioTrackMessageDTOConverter audioTrackToAudioTrackMessageDTOConverter;
+
 	public void enqueue(String routingKey, AudioTrack audioTrack) {
 		if (hasQueue(routingKey))
-			rabbitTemplate.convertAndSend(routingKey, audioTrack);
-
-		// todo: to implement a else in case of there is no queue
+			rabbitTemplate.convertAndSend(routingKey, audioTrackToAudioTrackMessageDTOConverter.convert(audioTrack));
+		else
+			throw new RuntimeException(); // todo: throw custom exception
 	}
 
-	public AudioTrack receive(String queueName){
+	public AudioTrackMessageDTO receive(String queueName) {
 		Object object = rabbitTemplate.receiveAndConvert(queueName);
 
-		if(object != null && object instanceof AudioTrack){
-			AudioTrack audioTrack = (AudioTrack) object;
-			return audioTrack;
+		if (object != null && object instanceof AudioTrackMessageDTO) {
+			return (AudioTrackMessageDTO) object;
 		}
 
 		return null;
@@ -42,7 +46,10 @@ public class AudioQueueService {
 	private boolean hasQueue(String queueName) {
 		// getQueueProperties() can be used to determine if a queue exists on the broker
 		if (rabbitAdmin.getQueueProperties(queueName) == null)
-			return createQueue(queueName) == null ? false : true;
+			return createQueue(queueName) == null ? false : true; // todo: to implement a
+																	// else in case of
+																	// there is no queue
+
 		else
 			return true;
 	}
