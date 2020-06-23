@@ -9,29 +9,30 @@ import io.github.brendonmiranda.javabot.listener.audio.AudioLoadResultHandlerImp
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author brendonmiranda
  */
+@Component
 public class PlayCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayCmd.class);
 
-	private final AudioPlayerManager audioPlayerManager;
+	@Autowired
+	private AudioQueueService audioQueueService;
 
-	private final AudioEventListener audioListener; // todo remove it. Instantiate in
-													// command method
+	@Autowired
+	private AudioPlayerManager audioPlayerManager;
 
-	private final AudioQueueService audioQueueService;
+	@Autowired
+	private EventWaiter eventWaiter;
 
-	private final EventWaiter eventWaiter;
+	@Autowired
+	private AudioEventListener audioEventListener;
 
-	public PlayCmd(AudioPlayerManager audioPlayerManager, AudioEventListener audioListener,
-			AudioQueueService audioQueueService, EventWaiter eventWaiter) {
-		this.audioPlayerManager = audioPlayerManager;
-		this.audioListener = audioListener;
-		this.audioQueueService = audioQueueService;
-		this.eventWaiter = eventWaiter;
+	public PlayCmd() {
 		this.name = "play";
 		this.help = "plays or queue a song";
 	}
@@ -41,7 +42,7 @@ public class PlayCmd extends MusicCmd {
 		logger.debug("PlayCmd loading track: {}", event.getArgs());
 
 		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
-		audioPlayer.addListener(audioListener);
+		audioPlayer.addListener(audioEventListener);
 
 		event.reply("Searching...", (message) -> {
 			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new AudioLoadResultHandlerImpl(

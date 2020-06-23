@@ -6,14 +6,9 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
 import io.github.brendonmiranda.javabot.listener.cmd.music.*;
-import io.github.brendonmiranda.javabot.service.AudioQueueService;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +25,6 @@ import static net.dv8tion.jda.api.entities.Activity.of;
 @Configuration
 public class JDAConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(JDAConfiguration.class);
-
 	@Value("${token}")
 	private String token;
 
@@ -42,20 +35,16 @@ public class JDAConfiguration {
 	private Long owner;
 
 	@Bean
-	public JDA load(AudioEventListener audioEventListener, LifeCycleService lifeCycleService,
-			AudioQueueService audioQueueService) throws LoginException {
+	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
+			QueueCmd queueCmd, NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
 
-		// todo : implement settings discord
-		JDA jda = JDABuilder.createDefault(token).build();
-		EventWaiter eventWaiter = eventWaiter();
+		JDA jda = JDABuilder.createDefault(token).build(); // todo : implement settings discord
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager(), audioEventListener, audioQueueService, eventWaiter),
-						new StopCmd(lifeCycleService), new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(),
-						new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
+				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, queueCmd, nowPlayingCmd, joinCmd)
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
-		jda.addEventListener(cmdListener, eventWaiter);
+		jda.addEventListener(cmdListener, eventWaiter());
 
 		return jda;
 	}
@@ -73,7 +62,6 @@ public class JDAConfiguration {
 	 */
 	@Bean
 	public AudioPlayerManager audioPlayerManager() {
-		logger.debug("Registering audio player manager");
 
 		AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);

@@ -2,13 +2,14 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @author evelynvieira
  */
+@Component
 public class QueueCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(QueueCmd.class);

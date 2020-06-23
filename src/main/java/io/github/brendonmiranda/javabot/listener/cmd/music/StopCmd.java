@@ -3,24 +3,26 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
 /**
  * @author evelynvieira
  */
+@Component
 public class StopCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
-	private final LifeCycleService lifeCycleService;
+	@Autowired
+	private LifeCycleService lifeCycleService;
 
-	public StopCmd(LifeCycleService lifeCycleService) {
-		this.lifeCycleService = lifeCycleService;
+	public StopCmd() {
 		this.name = "stop";
 		this.help = "stops the current song";
 	}

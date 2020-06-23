@@ -3,16 +3,19 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author evelynvieira
  */
+@Component
 public class PauseCmd extends MusicCmd {
 
-	private final LifeCycleService lifeCycleService;
+	@Autowired
+	private LifeCycleService lifeCycleService;
 
-	public PauseCmd(LifeCycleService lifeCycleService) {
-		this.lifeCycleService = lifeCycleService;
+	public PauseCmd() {
 		this.name = "pause";
 		this.help = "pauses the current song";
 	}

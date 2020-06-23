@@ -2,19 +2,17 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
 /**
  * @author evelynvieira
  */
+@Component
 public class SkipCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(SkipCmd.class);

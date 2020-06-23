@@ -18,8 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(RabbitConfiguration.class);
-
 	/*
 	 * todo: Evaluate strategy for scaling. Read that section -> (Connection and Resource
 	 * Management)

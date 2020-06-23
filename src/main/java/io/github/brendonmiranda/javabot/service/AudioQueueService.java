@@ -46,10 +46,7 @@ public class AudioQueueService {
 	private boolean hasQueue(String queueName) {
 		// getQueueProperties() can be used to determine if a queue exists on the broker
 		if (rabbitAdmin.getQueueProperties(queueName) == null)
-			return createQueue(queueName) == null ? false : true; // todo: to implement a
-																	// else in case of
-																	// there is no queue
-
+			return createQueue(queueName) == null ? false : true;
 		else
 			return true;
 	}

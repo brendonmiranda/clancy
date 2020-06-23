@@ -3,15 +3,14 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
-import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
+import org.springframework.stereotype.Component;
 
 /**
  * @author evelynvieira
  */
+@Component
 public class NowPlayingCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(NowPlayingCmd.class);
