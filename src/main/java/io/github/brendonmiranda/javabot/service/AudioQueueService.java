@@ -38,6 +38,10 @@ public class AudioQueueService {
 		return null;
 	}
 
+	public void destroy(String queueName) {
+		rabbitAdmin.deleteQueue(queueName);
+	}
+
 	/**
 	 * Checks if a queue exists. If the queue doesn't exist it tries to create it.
 	 * @param queueName

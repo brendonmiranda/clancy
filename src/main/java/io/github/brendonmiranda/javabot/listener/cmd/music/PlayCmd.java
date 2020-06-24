@@ -5,7 +5,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.audio.AudioLoadResultHandlerImpl;
+import io.github.brendonmiranda.javabot.listener.audio.PlayResultHandler;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +45,8 @@ public class PlayCmd extends MusicCmd {
 		audioPlayer.addListener(audioEventListener);
 
 		event.reply("Searching...", (message) -> {
-			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new AudioLoadResultHandlerImpl(
-					audioPlayer, event, audioPlayerManager, eventWaiter, message, false));
+			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new PlayResultHandler(audioPlayer,
+					event, audioPlayerManager, eventWaiter, message, false, audioQueueService));
 		});
 
 	}

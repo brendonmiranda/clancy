@@ -1,20 +1,22 @@
 package io.github.brendonmiranda.javabot.listener.audio;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
+import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.dv8tion.jda.api.entities.Activity.ActivityType.LISTENING;
 
@@ -31,8 +33,11 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Autowired
 	private LifeCycleService lifeCycleService;
 
-	// todo: a queue of tracks must be implemented properly by guild in order to scale it
-	public final static List<AudioTrack> queue = new ArrayList<>();
+	@Autowired
+	private AudioQueueService audioQueueService;
+
+	@Autowired
+	private AudioPlayerManager audioPlayerManager;
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
@@ -49,16 +54,19 @@ public class AudioEventListener extends AudioEventAdapter {
 		logger.info("Track has ended. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
+		Guild guild = (Guild) track.getUserData();
+		AudioTrackMessageDTO audioTrackMessageDTO = audioQueueService.receive(guild.getName());
+
 		// Plays the next track from queue
-		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
-			player.playTrack(queue.get(0));
-			queue.remove(0);
+		if (audioTrackMessageDTO != null && !endReason.equals(AudioTrackEndReason.STOPPED)) {
+			audioPlayerManager.loadItem(audioTrackMessageDTO.getAudioTrackInfoDTO().getIdentifier(),
+					new GeneralResultHandler(player, guild));
 			lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 			return;
 		}
 
-		lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
-		lifeCycleService.setActivityDefault(((Guild) track.getUserData()).getJDA());
+		lifeCycleService.scheduleDisconnectByInactivityTask(guild);
+		lifeCycleService.setActivityDefault(guild.getJDA());
 	}
 
 	@Override

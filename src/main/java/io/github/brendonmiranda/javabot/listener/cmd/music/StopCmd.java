@@ -2,14 +2,13 @@ package io.github.brendonmiranda.javabot.listener.cmd.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static io.github.brendonmiranda.javabot.listener.audio.AudioEventListener.queue;
 
 /**
  * @author evelynvieira
@@ -21,6 +20,9 @@ public class StopCmd extends MusicCmd {
 
 	@Autowired
 	private LifeCycleService lifeCycleService;
+
+	@Autowired
+	private AudioQueueService audioQueueService;
 
 	public StopCmd() {
 		this.name = "stop";
@@ -35,7 +37,7 @@ public class StopCmd extends MusicCmd {
 		lifeCycleService.setActivityDefault(event.getJDA());
 	}
 
-	public static void stop(Guild guild) {
+	public void stop(Guild guild) {
 		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
 
 		if (audioSendHandler != null) {
@@ -47,7 +49,7 @@ public class StopCmd extends MusicCmd {
 		}
 
 		guild.getAudioManager().closeAudioConnection();
-		queue.clear();
+		audioQueueService.destroy(guild.getName());
 	}
 
 }

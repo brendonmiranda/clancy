@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ public class LifeCycleService {
 
 	// todo: a queue of tasks must be implemented properly by guild in order to scale it
 	public static final List<TimerTask> timerTasksQueue = new ArrayList<>();
+
+	@Autowired
+	private StopCmd stopCmd;
 
 	@Value("${bot.inactivity.time}")
 	private long botInactivityTime;
@@ -61,7 +65,7 @@ public class LifeCycleService {
 					logger.info("Disconnected by inactivity. Guild: {}", guild.getName());
 
 					// same behavior from stop cmd
-					StopCmd.stop(guild);
+					stopCmd.stop(guild);
 					setActivityDefault(guild.getJDA());
 				}
 			}

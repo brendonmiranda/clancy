@@ -36,12 +36,12 @@ public class JDAConfiguration {
 
 	@Bean
 	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
-			QueueCmd queueCmd, NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
+			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
 
-		JDA jda = JDABuilder.createDefault(token).build(); // todo : implement settings discord
+		JDA jda = JDABuilder.createDefault(token).build();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, queueCmd, nowPlayingCmd, joinCmd)
+				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, nowPlayingCmd, joinCmd)
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
 		jda.addEventListener(cmdListener, eventWaiter());
