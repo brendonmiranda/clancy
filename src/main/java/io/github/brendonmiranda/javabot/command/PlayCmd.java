@@ -1,11 +1,11 @@
-package io.github.brendonmiranda.javabot.listener.cmd.music;
+package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
-import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.audio.PlayResultHandler;
+import io.github.brendonmiranda.javabot.listener.AudioEventListener;
+import io.github.brendonmiranda.javabot.listener.PlayResultHandler;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

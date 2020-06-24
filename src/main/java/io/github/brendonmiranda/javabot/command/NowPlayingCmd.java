@@ -1,8 +1,8 @@
-package io.github.brendonmiranda.javabot.listener.cmd.music;
+package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.listener.audio;
+package io.github.brendonmiranda.javabot.listener;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;

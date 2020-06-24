@@ -1,7 +1,7 @@
-package io.github.brendonmiranda.javabot.listener.cmd.music;
+package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

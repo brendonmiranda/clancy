@@ -1,7 +1,7 @@
 package io.github.brendonmiranda.javabot.service;
 
-import io.github.brendonmiranda.javabot.listener.audio.AudioSendHandlerImpl;
-import io.github.brendonmiranda.javabot.listener.cmd.music.StopCmd;
+import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.command.StopCmd;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;

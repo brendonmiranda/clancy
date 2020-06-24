@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.listener.cmd.music;
+package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;

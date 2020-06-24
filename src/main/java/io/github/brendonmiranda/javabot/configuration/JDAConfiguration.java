@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.config;
+package io.github.brendonmiranda.javabot.configuration;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
@@ -6,7 +6,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import io.github.brendonmiranda.javabot.listener.cmd.music.*;
+import io.github.brendonmiranda.javabot.command.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,7 +36,7 @@ public class JDAConfiguration {
 
 	@Bean
 	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
-			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
+					NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
 
 		JDA jda = JDABuilder.createDefault(token).build();
 

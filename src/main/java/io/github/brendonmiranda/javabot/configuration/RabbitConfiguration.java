@@ -1,7 +1,5 @@
-package io.github.brendonmiranda.javabot.config;
+package io.github.brendonmiranda.javabot.configuration;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
