@@ -2,6 +2,7 @@ package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.entities.Guild;
@@ -19,7 +20,7 @@ public class StopCmd extends MusicCmd {
 	private static final Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
 	@Autowired
-	private LifeCycleService lifeCycleService;
+	private ActivityService activityService;
 
 	@Autowired
 	private AudioQueueService audioQueueService;
@@ -34,7 +35,7 @@ public class StopCmd extends MusicCmd {
 		stop(event.getGuild());
 
 		event.replySuccess("The player has stopped!");
-		lifeCycleService.setActivityDefault(event.getJDA());
+		activityService.setActivityDefault(event.getJDA());
 	}
 
 	public void stop(Guild guild) {

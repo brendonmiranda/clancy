@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration {
 
+	private static final String LOCALHOST = "localhost";
+
 	/*
 	 * todo: Evaluate strategy for scaling. Read that section -> (Connection and Resource
 	 * Management)
@@ -24,7 +26,7 @@ public class RabbitConfiguration {
 	 */
 	@Bean
 	public ConnectionFactory connectionFactory() {
-		return new CachingConnectionFactory("localhost");
+		return new CachingConnectionFactory(LOCALHOST);
 	}
 
 	/**

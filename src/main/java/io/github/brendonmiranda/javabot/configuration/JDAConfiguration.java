@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_TYPE;
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_VALUE;
+import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_TYPE;
+import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_VALUE;
 import static net.dv8tion.jda.api.entities.Activity.of;
 
 /**

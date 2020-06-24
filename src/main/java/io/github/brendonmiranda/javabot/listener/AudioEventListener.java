@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.entities.Guild;
@@ -36,13 +37,16 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Autowired
 	private AudioPlayerManager audioPlayerManager;
 
+	@Autowired
+	private ActivityService activityService;
+
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
 		logger.info("Track has started. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
+		activityService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 	}
 
 	@Override
@@ -58,12 +62,12 @@ public class AudioEventListener extends AudioEventAdapter {
 		if (audioTrackMessageDTO != null && !endReason.equals(AudioTrackEndReason.STOPPED)) {
 			audioPlayerManager.loadItem(audioTrackMessageDTO.getAudioTrackInfoDTO().getIdentifier(),
 					new GeneralResultHandler(player, guild));
-			lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
+			activityService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 			return;
 		}
 
 		lifeCycleService.scheduleDisconnectByInactivityTask(guild);
-		lifeCycleService.setActivityDefault(guild.getJDA());
+		activityService.setActivityDefault(guild.getJDA());
 	}
 
 	@Override

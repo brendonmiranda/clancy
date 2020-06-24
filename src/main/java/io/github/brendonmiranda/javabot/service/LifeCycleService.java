@@ -8,8 +8,12 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.messaging.simp.config.TaskExecutorRegistration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,18 +29,23 @@ public class LifeCycleService {
 
 	public static final Logger logger = LoggerFactory.getLogger(LifeCycleService.class);
 
-	public static final String DEFAULT_ACTIVITY_VALUE = "você";
+	@Autowired
+	private ActivityService activityService;
 
-	public static final Activity.ActivityType DEFAULT_ACTIVITY_TYPE = Activity.ActivityType.LISTENING;
+	@Autowired
+	private RabbitAdmin rabbitAdmin;
 
-	// todo: a queue of tasks must be implemented properly by guild in order to scale it
-	public static final List<TimerTask> timerTasksQueue = new ArrayList<>();
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
 
 	@Autowired
 	private StopCmd stopCmd;
 
 	@Value("${bot.inactivity.time}")
 	private long botInactivityTime;
+
+	// todo: a queue of tasks must be implemented properly by guild in order to scale it
+	public static final List<TimerTask> timerTasksQueue = new ArrayList<>();
 
 	/**
 	 * Schedules task to disconnect inactive bot
@@ -55,6 +64,7 @@ public class LifeCycleService {
 		 */
 		Timer timer = new Timer(guild.getName());
 		TimerTask disconnectByInactivityTask = new TimerTask() {
+
 			public void run() {
 				AudioManager audioManager = guild.getAudioManager();
 				AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) audioManager.getSendingHandler();
@@ -66,29 +76,13 @@ public class LifeCycleService {
 
 					// same behavior from stop cmd
 					stopCmd.stop(guild);
-					setActivityDefault(guild.getJDA());
+					activityService.setActivityDefault(guild.getJDA());
 				}
 			}
 		};
 
 		timer.schedule(disconnectByInactivityTask, botInactivityTime);
 		timerTasksQueue.add(disconnectByInactivityTask);
-	}
-
-	/**
-	 * Sets a personalized activity
-	 * @param activityType activity type
-	 * @param value value
-	 */
-	public void setActivity(JDA jda, Activity.ActivityType activityType, String value) {
-		jda.getPresence().setActivity(Activity.of(activityType, value));
-	}
-
-	/**
-	 * Sets the default activity
-	 */
-	public void setActivityDefault(JDA jda) {
-		jda.getPresence().setActivity(Activity.of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE));
 	}
 
 }
