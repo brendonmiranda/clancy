@@ -1,19 +1,13 @@
 package io.github.brendonmiranda.javabot.service;
 
-import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.command.StopCmd;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Activity;
+import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.messaging.simp.config.TaskExecutorRegistration;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,18 +19,12 @@ import java.util.TimerTask;
  * @author brendonmiranda
  */
 @Service
-public class LifeCycleService {
+public class InactivityService {
 
-	public static final Logger logger = LoggerFactory.getLogger(LifeCycleService.class);
+	public static final Logger logger = LoggerFactory.getLogger(InactivityService.class);
 
 	@Autowired
 	private ActivityService activityService;
-
-	@Autowired
-	private RabbitAdmin rabbitAdmin;
-
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
 
 	@Autowired
 	private StopCmd stopCmd;

@@ -4,7 +4,6 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

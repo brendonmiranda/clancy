@@ -2,11 +2,10 @@ package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.*;
+import static io.github.brendonmiranda.javabot.service.InactivityService.*;
 
 /**
  * @author brendonmiranda

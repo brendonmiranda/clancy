@@ -2,7 +2,7 @@ package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import io.github.brendonmiranda.javabot.service.InactivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class PauseCmd extends MusicCmd {
 
 	@Autowired
-	private LifeCycleService lifeCycleService;
+	private InactivityService inactivityService;
 
 	public PauseCmd() {
 		this.name = "pause";
@@ -37,7 +37,7 @@ public class PauseCmd extends MusicCmd {
 
 		if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
 			audioSendHandler.getAudioPlayer().setPaused(true);
-			lifeCycleService.scheduleDisconnectByInactivityTask(event.getGuild());
+			inactivityService.scheduleDisconnectByInactivityTask(event.getGuild());
 			event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
 					+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
 		}

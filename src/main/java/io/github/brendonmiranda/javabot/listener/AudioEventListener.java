@@ -9,7 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import io.github.brendonmiranda.javabot.service.InactivityService;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class AudioEventListener extends AudioEventAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(AudioEventListener.class);
 
 	@Autowired
-	private LifeCycleService lifeCycleService;
+	private InactivityService inactivityService;
 
 	@Autowired
 	private AudioQueueService audioQueueService;
@@ -66,7 +66,7 @@ public class AudioEventListener extends AudioEventAdapter {
 			return;
 		}
 
-		lifeCycleService.scheduleDisconnectByInactivityTask(guild);
+		inactivityService.scheduleDisconnectByInactivityTask(guild);
 		activityService.setActivityDefault(guild.getJDA());
 	}
 

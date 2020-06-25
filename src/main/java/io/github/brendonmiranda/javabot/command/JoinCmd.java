@@ -1,7 +1,7 @@
 package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import io.github.brendonmiranda.javabot.service.InactivityService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -19,7 +19,7 @@ public class JoinCmd extends MusicCmd {
 	private static final Logger logger = LoggerFactory.getLogger(JoinCmd.class);
 
 	@Autowired
-	private LifeCycleService lifeCycleService;
+	private InactivityService inactivityService;
 
 	public JoinCmd() {
 		this.name = "join";
@@ -51,7 +51,7 @@ public class JoinCmd extends MusicCmd {
 		AudioManager audioManager = guild.getAudioManager();
 
 		audioManager.openAudioConnection(memberVoiceChannel);
-		lifeCycleService.scheduleDisconnectByInactivityTask(guild);
+		inactivityService.scheduleDisconnectByInactivityTask(guild);
 	}
 
 }
