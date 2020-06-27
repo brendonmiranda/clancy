@@ -3,11 +3,20 @@ package io.github.brendonmiranda.javabot.service;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AudioQueueService extends QueueService<AudioTrack, AudioTrackMessageDTO> {
+public class AudioQueueService {
+
+	@Autowired
+	protected RabbitAdmin rabbitAdmin;
+
+	@Autowired
+	protected RabbitTemplate rabbitTemplate;
 
 	@Autowired
 	private AudioTrackToAudioTrackMessageDTOConverter audioTrackToAudioTrackMessageDTOConverter;
@@ -27,6 +36,32 @@ public class AudioQueueService extends QueueService<AudioTrack, AudioTrackMessag
 		}
 
 		return null;
+	}
+
+	public void destroy(String queueName) {
+		rabbitAdmin.deleteQueue(queueName);
+	}
+
+	/**
+	 * Checks if a queue exists. If the queue doesn't exist it tries to create it.
+	 * @param queueName
+	 * @return
+	 */
+	protected boolean hasQueue(String queueName) {
+		// getQueueProperties() can be used to determine if a queue exists on the broker
+		if (rabbitAdmin.getQueueProperties(queueName) == null)
+			return createQueue(queueName) == null ? false : true;
+		else
+			return true;
+	}
+
+	/**
+	 * Creates a queue on the broker and returns the queue name if successful, otherwise
+	 * it returns null.
+	 * @return queueName
+	 */
+	protected String createQueue(String queueName) {
+		return rabbitAdmin.declareQueue(new Queue(queueName));
 	}
 
 }

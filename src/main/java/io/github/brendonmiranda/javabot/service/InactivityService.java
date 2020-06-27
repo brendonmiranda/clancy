@@ -23,14 +23,14 @@ public class InactivityService {
 
 	public static final Logger logger = LoggerFactory.getLogger(InactivityService.class);
 
+	@Value("${bot.inactivity.time}")
+	private long botInactivityTime;
+
 	@Autowired
 	private ActivityService activityService;
 
 	@Autowired
 	private StopCmd stopCmd;
-
-	@Value("${bot.inactivity.time}")
-	private long botInactivityTime;
 
 	// todo: a queue of tasks must be implemented properly by guild in order to scale it
 	public static final List<TimerTask> timerTasksQueue = new ArrayList<>();

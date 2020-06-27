@@ -7,24 +7,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActivityService {
 
-    public static final String DEFAULT_ACTIVITY_VALUE = "você";
+	public static final String DEFAULT_ACTIVITY_VALUE = "você";
 
-    public static final Activity.ActivityType DEFAULT_ACTIVITY_TYPE = Activity.ActivityType.LISTENING;
+	public static final Activity.ActivityType DEFAULT_ACTIVITY_TYPE = Activity.ActivityType.LISTENING;
 
-    /**
-     * Sets a personalized activity
-     * @param activityType activity type
-     * @param value value
-     */
-    public void setActivity(JDA jda, Activity.ActivityType activityType, String value) {
-        jda.getPresence().setActivity(Activity.of(activityType, value));
-    }
+	/**
+	 * Sets a personalized activity
+	 * @param activityType activity type
+	 * @param value value
+	 */
+	public void setActivity(JDA jda, Activity.ActivityType activityType, String value) {
+		jda.getPresence().setActivity(Activity.of(activityType, value));
+	}
 
-    /**
-     * Sets the default activity
-     */
-    public void setActivityDefault(JDA jda) {
-        jda.getPresence().setActivity(Activity.of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE));
-    }
+	/**
+	 * Sets the default activity
+	 */
+	public void setActivityDefault(JDA jda) {
+		jda.getPresence().setActivity(Activity.of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE));
+	}
 
 }
