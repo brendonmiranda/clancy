@@ -56,14 +56,17 @@ public class AudioEventListener extends AudioEventAdapter {
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
 		Guild guild = (Guild) track.getUserData();
-		AudioTrackMessageDTO audioTrackMessageDTO = audioQueueService.receive(guild.getName());
 
-		// Plays the next track from queue
-		if (audioTrackMessageDTO != null && !endReason.equals(AudioTrackEndReason.STOPPED)) {
-			audioPlayerManager.loadItem(audioTrackMessageDTO.getAudioTrackInfoDTO().getIdentifier(),
-					new GeneralResultHandler(player, guild));
-			activityService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
-			return;
+		if(!endReason.equals(AudioTrackEndReason.STOPPED)) {
+			AudioTrackMessageDTO audioTrackMessage = audioQueueService.receive(guild.getName());
+
+			// Plays the next track from queue
+			if (audioTrackMessage != null) {
+				audioPlayerManager.loadItem(audioTrackMessage.getAudioTrackInfoDTO().getIdentifier(),
+						new GeneralResultHandler(player, guild));
+				activityService.setActivity(guild.getJDA(), LISTENING, audioTrackInfo.title);
+				return;
+			}
 		}
 
 		inactivityService.scheduleDisconnectByInactivityTask(guild);

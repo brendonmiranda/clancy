@@ -42,7 +42,7 @@ public class PauseCmd extends MusicCmd {
 			audioPlayer.setPaused(true);
 			inactivityService.scheduleDisconnectByInactivityTask(event.getGuild());
 			event.replySuccess("Paused **" + audioPlayer.getPlayingTrack().getInfo().title + "**. Type `"
-					+ event.getClient().getPrefix() + "resume` to unpause!");
+					+ event.getClient().getPrefix() + " resume` to unpause!");
 		}
 	}
 
