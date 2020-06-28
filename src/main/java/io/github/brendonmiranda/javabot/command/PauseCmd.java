@@ -1,6 +1,7 @@
 package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.InactivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,25 +22,27 @@ public class PauseCmd extends MusicCmd {
 	}
 
 	public void command(CommandEvent event) {
-		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
-				.getSendingHandler();
+		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
-		if (audioSendHandler == null)
-			return;
-
-		if (audioSendHandler.getAudioPlayer().isPaused()) {
-			// todo: instantiate ResumeCmd and use it instead
-			audioSendHandler.getAudioPlayer().setPaused(false);
-			event.replySuccess(
-					"Resumed **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title + "**.");
+		if (audioSendHandler == null) {
+			event.replyError("There is no track playing to pause.");
 			return;
 		}
 
-		if (audioSendHandler.getAudioPlayer().getPlayingTrack() != null) {
-			audioSendHandler.getAudioPlayer().setPaused(true);
+		AudioPlayer audioPlayer = getAudioPlayer(audioSendHandler);
+
+		if (audioPlayer.isPaused()) {
+			// todo: instantiate ResumeCmd and use it instead
+			audioPlayer.setPaused(false);
+			event.replySuccess("Resumed **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+			return;
+		}
+
+		if (audioPlayer.getPlayingTrack() != null) {
+			audioPlayer.setPaused(true);
 			inactivityService.scheduleDisconnectByInactivityTask(event.getGuild());
-			event.replySuccess("Paused **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
-					+ "**. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
+			event.replySuccess("Paused **" + audioPlayer.getPlayingTrack().getInfo().title + "**. Type `"
+					+ event.getClient().getPrefix() + "resume` to unpause!");
 		}
 	}
 

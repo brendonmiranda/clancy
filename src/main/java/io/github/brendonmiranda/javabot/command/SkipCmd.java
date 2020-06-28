@@ -7,6 +7,7 @@ import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.listener.GeneralResultHandler;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
+import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,20 @@ public class SkipCmd extends MusicCmd {
 	@Override
 	public void command(CommandEvent event) {
 
-		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
-				.getSendingHandler();
-		AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
-		if (audioSendHandler != null && audioPlayer.getPlayingTrack() != null) {
+		Guild guild = getGuild(event);
+		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
-			AudioTrackMessageDTO audioTrackMessageDTO = audioQueueService.receive(event.getGuild().getName());
+		if (audioSendHandler == null) {
+			event.replyError("There is no track playing to skip.");
+			return;
+		}
+
+		AudioPlayer audioPlayer = getAudioPlayer(audioSendHandler);
+
+		if (audioPlayer.getPlayingTrack() != null) {
+
+			AudioTrackMessageDTO audioTrackMessageDTO = audioQueueService.receive(guild.getName());
+
 			if (audioTrackMessageDTO != null) {
 
 				if (audioPlayer.isPaused())
@@ -47,15 +56,12 @@ public class SkipCmd extends MusicCmd {
 
 				audioPlayer.stopTrack();
 				audioPlayerManager.loadItem(audioTrackMessageDTO.getAudioTrackInfoDTO().getIdentifier(),
-						new GeneralResultHandler(audioPlayer, event.getGuild()));
-				event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+						new GeneralResultHandler(audioPlayer, guild));
 			}
 			else {
-				event.replyWarning("Your queue is empty.");
+				event.replyError("Your queue is empty.");
 			}
-		}
-		else {
-			event.replyWarning("There is no track playing.");
+
 		}
 	}
 

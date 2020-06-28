@@ -1,10 +1,12 @@
 package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +40,21 @@ public class StopCmd extends MusicCmd {
 	}
 
 	public void stop(Guild guild) {
-		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
+
+		AudioManager audioManager = getAudioManager(guild);
+		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
 		if (audioSendHandler != null) {
-			audioSendHandler.getAudioPlayer().stopTrack();
+			AudioPlayer audioPlayer = getAudioPlayer(audioSendHandler);
+
+			audioPlayer.stopTrack();
 
 			// Pausing a song to not starts the new song paused
-			if (audioSendHandler.getAudioPlayer().isPaused())
-				audioSendHandler.getAudioPlayer().setPaused(false);
+			if (audioPlayer.isPaused())
+				audioPlayer.setPaused(false);
 		}
 
-		guild.getAudioManager().closeAudioConnection();
+		audioManager.closeAudioConnection();
 		audioQueueService.destroy(guild.getName());
 	}
 

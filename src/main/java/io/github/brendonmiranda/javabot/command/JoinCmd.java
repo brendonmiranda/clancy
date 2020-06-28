@@ -28,7 +28,7 @@ public class JoinCmd extends MusicCmd {
 
 	/**
 	 * It was overrode in order to avoid validations from MusicCmd which must not be
-	 * applied to JoinCmd.
+	 * applied to Join Command.
 	 * @param event
 	 */
 	@Override
@@ -47,8 +47,8 @@ public class JoinCmd extends MusicCmd {
 	@Override
 	public void command(CommandEvent event) {
 		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
-		Guild guild = event.getGuild();
-		AudioManager audioManager = guild.getAudioManager();
+		Guild guild = getGuild(event);
+		AudioManager audioManager = getAudioManager(guild);
 
 		audioManager.openAudioConnection(memberVoiceChannel);
 		inactivityService.scheduleDisconnectByInactivityTask(guild);
