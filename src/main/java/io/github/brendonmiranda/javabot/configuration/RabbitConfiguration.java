@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +17,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfiguration {
 
-	private static final String LOCALHOST = "localhost";
+	@Value("${rabbit.hostname}")
+	private String hostname;
+
+	@Value("${rabbit.username}")
+	private String username;
+
+	@Value("${rabbit.password}")
+	private String password;
+
+	@Value("${rabbit.virtualhost}")
+	private String virtualHost;
 
 	/*
 	 * todo: Evaluate strategy for scaling. Read that section -> (Connection and Resource
@@ -26,7 +37,13 @@ public class RabbitConfiguration {
 	 */
 	@Bean
 	public ConnectionFactory connectionFactory() {
-		return new CachingConnectionFactory(LOCALHOST);
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(hostname);
+		connectionFactory.setUsername(username);
+		connectionFactory.setPassword(password);
+		connectionFactory.setVirtualHost(virtualHost);
+		// connectionFactory.setRequestedHeartBeat(30);
+		// connectionFactory.setConnectionTimeout(30000);
+		return connectionFactory;
 	}
 
 	/**
