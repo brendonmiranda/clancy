@@ -52,12 +52,12 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
-		logger.info("Track has ended. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
-				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
+		logger.info("Track has ended. Reason: {}, title: {}, author: {}, identifier: {}, source: {}", endReason.name(),
+				audioTrackInfo.title, audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
 		Guild guild = (Guild) track.getUserData();
 
-		if(!endReason.equals(AudioTrackEndReason.STOPPED)) {
+		if (!endReason.equals(AudioTrackEndReason.STOPPED)) {
 			AudioTrackMessageDTO audioTrackMessage = audioQueueService.receive(guild.getName());
 
 			// Plays the next track from queue

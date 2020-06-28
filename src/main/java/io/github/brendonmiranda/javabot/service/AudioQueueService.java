@@ -4,32 +4,37 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AudioQueueService {
 
 	@Autowired
-	protected RabbitAdmin rabbitAdmin;
+	private RabbitAdmin rabbitAdmin;
 
 	@Autowired
-	protected RabbitTemplate rabbitTemplate;
+	private RabbitTemplate rabbitTemplate;
 
 	@Autowired
 	private AudioTrackToAudioTrackMessageDTOConverter audioTrackToAudioTrackMessageDTOConverter;
 
+	@Value("${rabbit.queue.ttl}")
+	private int ttlQueue;
+
 	public void enqueue(String routingKey, AudioTrack object) {
-		if (hasQueue(routingKey))
+		if (hasQueue(routingKey, true))
 			rabbitTemplate.convertAndSend(routingKey, audioTrackToAudioTrackMessageDTOConverter.convert(object));
 		else
 			throw new RuntimeException(); // todo: throw custom exception
 	}
 
 	public AudioTrackMessageDTO receive(String queueName) {
-		Object object = rabbitTemplate.receiveAndConvert(queueName);
+		Object object = hasQueue(queueName, false) ? rabbitTemplate.receiveAndConvert(queueName) : null;
 
 		if (object != null && object instanceof AudioTrackMessageDTO) {
 			return (AudioTrackMessageDTO) object;
@@ -38,30 +43,49 @@ public class AudioQueueService {
 		return null;
 	}
 
+	/**
+	 * Deletes the queue by the name.
+	 * @param queueName
+	 */
 	public void destroy(String queueName) {
 		rabbitAdmin.deleteQueue(queueName);
 	}
 
 	/**
-	 * Checks if a queue exists. If the queue doesn't exist it tries to create it.
+	 * Checks if a queue exists. If the queue doesn't exist the createIfNotExist variable
+	 * decides if it must be created or not.
 	 * @param queueName
 	 * @return
 	 */
-	protected boolean hasQueue(String queueName) {
+	private boolean hasQueue(String queueName, boolean createIfNotExist) {
 		// getQueueProperties() can be used to determine if a queue exists on the broker
-		if (rabbitAdmin.getQueueProperties(queueName) == null)
-			return createQueue(queueName) == null ? false : true;
-		else
+		if (rabbitAdmin.getQueueProperties(queueName) == null) {
+
+			if (createIfNotExist)
+				return createQueue(queueName) == null ? false : true;
+			else
+				return false;
+
+		}
+		else {
 			return true;
+		}
 	}
 
 	/**
 	 * Creates a queue on the broker and returns the queue name if successful, otherwise
 	 * it returns null.
+	 *
+	 * It creates a durable queue which will survive a server restart. Also, it sets the
+	 * time (x-expires argument) that the queue can remain unused before being deleted.
+	 *
+	 * @see <a href="https://www.rabbitmq.com/ttl.html#queue-ttl" />
 	 * @return queueName
 	 */
-	protected String createQueue(String queueName) {
-		return rabbitAdmin.declareQueue(new Queue(queueName));
+	private String createQueue(String queueName) {
+		Queue queue = QueueBuilder.durable(queueName).expires(ttlQueue).build();
+
+		return rabbitAdmin.declareQueue(queue);
 	}
 
 }
