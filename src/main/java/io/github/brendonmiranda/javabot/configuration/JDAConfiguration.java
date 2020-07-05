@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.config;
+package io.github.brendonmiranda.javabot.configuration;
 
 import com.jagrosh.jdautilities.command.CommandClient;
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
@@ -6,30 +6,24 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import io.github.brendonmiranda.javabot.listener.audio.AudioEventListener;
-import io.github.brendonmiranda.javabot.listener.cmd.music.*;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import io.github.brendonmiranda.javabot.command.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_TYPE;
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.DEFAULT_ACTIVITY_VALUE;
+import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_TYPE;
+import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_VALUE;
 import static net.dv8tion.jda.api.entities.Activity.of;
 
 /**
  * @author brendonmiranda
  */
 @Configuration
-public class BotConfiguration {
-
-	private static final Logger logger = LoggerFactory.getLogger(BotConfiguration.class);
+public class JDAConfiguration {
 
 	@Value("${token}")
 	private String token;
@@ -41,20 +35,16 @@ public class BotConfiguration {
 	private Long owner;
 
 	@Bean
-	public JDA load(AudioPlayerManager audioPlayerManager, AudioEventListener audioEventListener,
-			EventWaiter eventWaiter, LifeCycleService lifeCycleService) throws LoginException {
-		logger.debug("Configuring Java Discord Api");
+	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
+			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
 
-		// todo : implement settings discord
 		JDA jda = JDABuilder.createDefault(token).build();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
-				.addCommands(new PlayCmd(audioPlayerManager, audioEventListener, eventWaiter),
-						new StopCmd(lifeCycleService), new PauseCmd(lifeCycleService), new ResumeCmd(), new SkipCmd(),
-						new QueueCmd(), new NowPlayingCmd(), new JoinCmd(lifeCycleService))
+				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, nowPlayingCmd, joinCmd)
 				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
 
-		jda.addEventListener(cmdListener, eventWaiter);
+		jda.addEventListener(cmdListener, eventWaiter());
 
 		return jda;
 	}
@@ -72,7 +62,6 @@ public class BotConfiguration {
 	 */
 	@Bean
 	public AudioPlayerManager audioPlayerManager() {
-		logger.debug("Registering audio player manager");
 
 		AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
