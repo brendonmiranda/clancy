@@ -1,12 +1,12 @@
-package io.github.brendonmiranda.javabot.listener.cmd.music;
+package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
-
-import static io.github.brendonmiranda.javabot.service.LifeCycleService.*;
 
 /**
  * @author brendonmiranda
@@ -41,13 +41,23 @@ public abstract class MusicCmd extends Command {
 			return;
 		}
 
-		/*
-		 * Cancel any disconnectByInactivityTask scheduled previously given that a command
-		 * has been triggered
-		 */
-		timerTasksQueue.forEach(task -> task.cancel());
-
 		command(event);
+	}
+
+	protected AudioSendHandlerImpl getAudioSendHandler(Guild guild) {
+		return (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
+	}
+
+	protected AudioPlayer getAudioPlayer(AudioSendHandlerImpl audioSendHandler) {
+		return audioSendHandler.getAudioPlayer();
+	}
+
+	protected Guild getGuild(CommandEvent event) {
+		return event.getGuild();
+	}
+
+	protected AudioManager getAudioManager(Guild guild) {
+		return guild.getAudioManager();
 	}
 
 	public abstract void command(CommandEvent event);

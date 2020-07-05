@@ -1,20 +1,20 @@
-package io.github.brendonmiranda.javabot.listener.audio;
+package io.github.brendonmiranda.javabot.listener;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import io.github.brendonmiranda.javabot.service.LifeCycleService;
-import net.dv8tion.jda.api.JDA;
+import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.exception.AudioTrackException;
+import io.github.brendonmiranda.javabot.service.ActivityService;
+import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.dv8tion.jda.api.entities.Activity.ActivityType.LISTENING;
 
@@ -29,10 +29,13 @@ public class AudioEventListener extends AudioEventAdapter {
 	private static final Logger logger = LoggerFactory.getLogger(AudioEventListener.class);
 
 	@Autowired
-	private LifeCycleService lifeCycleService;
+	private AudioQueueService audioQueueService;
 
-	// todo: a queue of tracks must be implemented properly by guild in order to scale it
-	public final static List<AudioTrack> queue = new ArrayList<>();
+	@Autowired
+	private AudioPlayerManager audioPlayerManager;
+
+	@Autowired
+	private ActivityService activityService;
 
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
@@ -40,25 +43,30 @@ public class AudioEventListener extends AudioEventAdapter {
 		logger.info("Track has started. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
+		activityService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 	}
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
-		logger.info("Track has ended. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
-				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
+		logger.info("Track has ended. Reason: {}, title: {}, author: {}, identifier: {}, source: {}", endReason.name(),
+				audioTrackInfo.title, audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		// Plays the next track from queue
-		if (!queue.isEmpty() && !endReason.equals(AudioTrackEndReason.STOPPED)) {
-			player.playTrack(queue.get(0));
-			queue.remove(0);
-			lifeCycleService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
-			return;
+		Guild guild = (Guild) track.getUserData();
+
+		if (!endReason.equals(AudioTrackEndReason.STOPPED)) {
+			AudioTrackMessageDTO audioTrackMessage = audioQueueService.receive(guild.getName());
+
+			// Plays the next track from queue
+			if (audioTrackMessage != null) {
+				audioPlayerManager.loadItem(audioTrackMessage.getAudioTrackInfoDTO().getIdentifier(),
+						new GeneralResultHandler(player, guild));
+				activityService.setActivity(guild.getJDA(), LISTENING, audioTrackInfo.title);
+				return;
+			}
 		}
 
-		lifeCycleService.scheduleDisconnectByInactivityTask((Guild) track.getUserData());
-		lifeCycleService.setActivityDefault(((Guild) track.getUserData()).getJDA());
+		activityService.setActivityDefault(guild.getJDA());
 	}
 
 	@Override
@@ -76,7 +84,8 @@ public class AudioEventListener extends AudioEventAdapter {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
 		logger.info("Track got stuck. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
-		// todo: throws a custom exception
+
+		throw new AudioTrackException("Track got stuck. Audio track title: " + audioTrackInfo.title);
 	}
 
 }

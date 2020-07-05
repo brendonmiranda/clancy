@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.listener.audio;
+package io.github.brendonmiranda.javabot.listener;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.AudioFrame;
@@ -19,6 +19,8 @@ public class AudioSendHandlerImpl implements AudioSendHandler {
 
 	private AudioFrame lastFrame;
 
+	private long lastRequestTime;
+
 	public AudioSendHandlerImpl(AudioPlayer audioPlayer) {
 		this.audioPlayer = audioPlayer;
 	}
@@ -31,6 +33,7 @@ public class AudioSendHandlerImpl implements AudioSendHandler {
 
 	@Override
 	public ByteBuffer provide20MsAudio() {
+		lastRequestTime = System.currentTimeMillis();
 		return ByteBuffer.wrap(lastFrame.getData());
 	}
 
@@ -41,6 +44,10 @@ public class AudioSendHandlerImpl implements AudioSendHandler {
 
 	public AudioPlayer getAudioPlayer() {
 		return audioPlayer;
+	}
+
+	public long getLastRequestTime() {
+		return lastRequestTime;
 	}
 
 }
