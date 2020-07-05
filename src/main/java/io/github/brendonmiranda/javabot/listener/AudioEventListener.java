@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.exception.AudioTrackException;
 import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
@@ -83,7 +84,8 @@ public class AudioEventListener extends AudioEventAdapter {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
 		logger.info("Track got stuck. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
-		// todo: throws a custom exception
+
+		throw new AudioTrackException("Track got stuck. Audio track title: " + audioTrackInfo.title);
 	}
 
 }

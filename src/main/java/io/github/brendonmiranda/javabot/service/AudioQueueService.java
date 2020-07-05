@@ -3,6 +3,7 @@ package io.github.brendonmiranda.javabot.service;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.exception.AudioQueueException;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -30,7 +31,8 @@ public class AudioQueueService {
 		if (hasQueue(routingKey, true))
 			rabbitTemplate.convertAndSend(routingKey, audioTrackToAudioTrackMessageDTOConverter.convert(object));
 		else
-			throw new RuntimeException(); // todo: throw custom exception
+			throw new AudioQueueException("An error occurred trying to reach or create a queue. RoutingKey: "
+					+ routingKey + ", audio track title: " + object.getInfo().title);
 	}
 
 	public AudioTrackMessageDTO receive(String queueName) {

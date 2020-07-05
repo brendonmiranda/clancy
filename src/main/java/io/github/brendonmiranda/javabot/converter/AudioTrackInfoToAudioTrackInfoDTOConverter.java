@@ -2,6 +2,8 @@ package io.github.brendonmiranda.javabot.converter;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.dto.AudioTrackInfoDTO;
+
+import io.github.brendonmiranda.javabot.exception.ConversionException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,8 @@ public class AudioTrackInfoToAudioTrackInfoDTOConverter implements Converter<Aud
 	public AudioTrackInfoDTO convert(AudioTrackInfo source) {
 
 		if (source == null)
-			throw new RuntimeException(); // todo: throw exception
+			throw new ConversionException(
+					"An error occurred while converting AudioTrackInfo to AudioTrackInfoDTO: AudioTrackInfo null.");
 
 		AudioTrackInfoDTO audioTrackInfoDTO = new AudioTrackInfoDTO();
 		audioTrackInfoDTO.setTitle(source.title);
