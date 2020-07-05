@@ -1,6 +1,7 @@
 package io.github.brendonmiranda.javabot.service;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import io.github.brendonmiranda.javabot.configuration.RabbitConfiguration;
 import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import io.github.brendonmiranda.javabot.exception.AudioQueueException;
@@ -27,6 +28,16 @@ public class AudioQueueService {
 	@Value("${rabbit.queue.ttl}")
 	private int ttlQueue;
 
+	/**
+	 * Enqueues an audio track message generated from the given audio track object in the
+	 * given queue. The routing key must be the queue name given the default binding
+	 * agreed in the configuration.
+	 * @param routingKey queue name
+	 * @param object audio track
+	 * @see RabbitConfiguration#rabbitAdmin
+	 * @see AudioTrackToAudioTrackMessageDTOConverter
+	 * @see AudioTrackMessageDTO
+	 */
 	public void enqueue(String routingKey, AudioTrack object) {
 		if (hasQueue(routingKey, true))
 			rabbitTemplate.convertAndSend(routingKey, audioTrackToAudioTrackMessageDTOConverter.convert(object));
@@ -35,6 +46,12 @@ public class AudioQueueService {
 					+ routingKey + ", audio track title: " + object.getInfo().title);
 	}
 
+	/**
+	 * Receives an audio track message from the given queue if it exists, otherwise it
+	 * returns null.
+	 * @param queueName
+	 * @return audio track message
+	 */
 	public AudioTrackMessageDTO receive(String queueName) {
 		Object object = hasQueue(queueName, false) ? rabbitTemplate.receiveAndConvert(queueName) : null;
 
