@@ -46,6 +46,9 @@ public class RabbitConfiguration {
 		return connectionFactory;
 	}
 
+	// todo: application must verify if a connection was reached with rabbitmq because
+	// otherwise the app cannot start
+
 	/**
 	 * We are not declaring {@link Exchange} given that {@link RabbitAdmin} has a default
 	 * exchange {@link RabbitAdmin#DEFAULT_EXCHANGE_NAME} which is a direct exchange.

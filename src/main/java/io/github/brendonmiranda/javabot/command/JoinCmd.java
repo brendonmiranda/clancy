@@ -1,13 +1,11 @@
 package io.github.brendonmiranda.javabot.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
-import io.github.brendonmiranda.javabot.service.InactivityService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,9 +15,6 @@ import org.springframework.stereotype.Component;
 public class JoinCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(JoinCmd.class);
-
-	@Autowired
-	private InactivityService inactivityService;
 
 	public JoinCmd() {
 		this.name = "join";
@@ -51,7 +46,6 @@ public class JoinCmd extends MusicCmd {
 		AudioManager audioManager = getAudioManager(guild);
 
 		audioManager.openAudioConnection(memberVoiceChannel);
-		inactivityService.scheduleDisconnectByInactivityTask(guild);
 	}
 
 }
