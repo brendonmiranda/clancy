@@ -4,6 +4,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author brendonmiranda
+ */
 @Service
 public class ActivityService {
 

@@ -7,6 +7,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 
+/**
+ * @author brendonmiranda
+ */
 public class GeneralResultHandler implements AudioLoadResultHandler {
 
 	private final AudioPlayer audioPlayer;

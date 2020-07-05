@@ -7,6 +7,9 @@ import io.github.brendonmiranda.javabot.exception.ConversionException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author brendonmiranda
+ */
 @Component
 public class AudioTrackInfoToAudioTrackInfoDTOConverter implements Converter<AudioTrackInfo, AudioTrackInfoDTO> {
 
