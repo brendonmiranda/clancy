@@ -29,11 +29,16 @@ public class RabbitConfiguration {
 	@Value("${rabbit.virtualhost}")
 	private String virtualHost;
 
+	@Value("${rabbit.connection.timeout}")
+	private int connectionTimeout;
+
+	@Value("${rabbit.requested.heartbeat}")
+	private int requestedHeartBeat;
+
 	/*
 	 * todo: Evaluate strategy for scaling. Read that section -> (Connection and Resource
 	 * Management)
 	 * https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#connections
-	 * For now, it should be simple in order to execute the prove of concept
 	 */
 	@Bean
 	public ConnectionFactory connectionFactory() {
@@ -41,13 +46,10 @@ public class RabbitConfiguration {
 		connectionFactory.setUsername(username);
 		connectionFactory.setPassword(password);
 		connectionFactory.setVirtualHost(virtualHost);
-		// connectionFactory.setRequestedHeartBeat(30);
-		// connectionFactory.setConnectionTimeout(30000);
+		connectionFactory.setConnectionTimeout(connectionTimeout);
+		connectionFactory.setRequestedHeartBeat(requestedHeartBeat);
 		return connectionFactory;
 	}
-
-	// todo: application must verify if a connection was reached with rabbitmq because
-	// otherwise the app cannot start
 
 	/**
 	 * We are not declaring {@link Exchange} given that {@link RabbitAdmin} has a default

@@ -23,9 +23,6 @@ public class StopCmd extends MusicCmd {
 	@Autowired
 	private ActivityService activityService;
 
-	@Autowired
-	private AudioQueueService audioQueueService;
-
 	public StopCmd() {
 		this.name = "stop";
 		this.help = "stops the current song";
@@ -33,13 +30,11 @@ public class StopCmd extends MusicCmd {
 
 	public void command(CommandEvent event) {
 
-		stop(event.getGuild());
-
+		stop(event.getGuild(), activityService);
 		event.replySuccess("The player has stopped!");
-		activityService.setActivityDefault(event.getJDA());
 	}
 
-	public void stop(Guild guild) {
+	public void stop(Guild guild, ActivityService activityService) {
 
 		AudioManager audioManager = getAudioManager(guild);
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
@@ -55,7 +50,7 @@ public class StopCmd extends MusicCmd {
 		}
 
 		audioManager.closeAudioConnection();
-		audioQueueService.destroy(guild.getName());
+		activityService.setActivityDefault(guild.getJDA());
 	}
 
 }
