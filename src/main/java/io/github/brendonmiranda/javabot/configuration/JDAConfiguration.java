@@ -15,9 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.security.auth.login.LoginException;
 
-import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_TYPE;
-import static io.github.brendonmiranda.javabot.service.ActivityService.DEFAULT_ACTIVITY_VALUE;
-import static net.dv8tion.jda.api.entities.Activity.of;
+import static net.dv8tion.jda.api.entities.Activity.listening;
 
 /**
  * @author brendonmiranda
@@ -42,7 +40,7 @@ public class JDAConfiguration {
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, nowPlayingCmd, joinCmd)
-				.setActivity(of(DEFAULT_ACTIVITY_TYPE, DEFAULT_ACTIVITY_VALUE)).build();
+				.setActivity(listening("type !help")).build();
 
 		jda.addEventListener(cmdListener, eventWaiter());
 

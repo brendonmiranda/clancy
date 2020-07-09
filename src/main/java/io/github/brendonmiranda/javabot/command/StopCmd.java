@@ -20,9 +20,6 @@ public class StopCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(StopCmd.class);
 
-	@Autowired
-	private ActivityService activityService;
-
 	public StopCmd() {
 		this.name = "stop";
 		this.help = "stops the current song";
@@ -30,11 +27,11 @@ public class StopCmd extends MusicCmd {
 
 	public void command(CommandEvent event) {
 
-		stop(event.getGuild(), activityService);
+		stop(event.getGuild());
 		event.replySuccess("The player has stopped!");
 	}
 
-	public void stop(Guild guild, ActivityService activityService) {
+	public void stop(Guild guild) {
 
 		AudioManager audioManager = getAudioManager(guild);
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
@@ -44,13 +41,12 @@ public class StopCmd extends MusicCmd {
 
 			audioPlayer.stopTrack();
 
-			// Pausing a song to not starts the new song paused
+			// pause music to prevent the next one from starting paused
 			if (audioPlayer.isPaused())
 				audioPlayer.setPaused(false);
 		}
 
 		audioManager.closeAudioConnection();
-		activityService.setActivityDefault(guild.getJDA());
 	}
 
 }
