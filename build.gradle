@@ -17,7 +17,7 @@ plugins {
 apply plugin: 'io.spring.javaformat'
 
 group = 'io.github.brendonmiranda'
-version = '1.2.1'
+version = '1.2.2'
 sourceCompatibility = '13'
 
 configurations {

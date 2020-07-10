@@ -34,16 +34,12 @@ public class AudioEventListener extends AudioEventAdapter {
 	@Autowired
 	private AudioPlayerManager audioPlayerManager;
 
-	@Autowired
-	private ActivityService activityService;
-
 	@Override
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		AudioTrackInfo audioTrackInfo = track.getInfo();
 		logger.info("Track has started. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		activityService.setActivity(((Guild) track.getUserData()).getJDA(), LISTENING, audioTrackInfo.title);
 	}
 
 	@Override
@@ -61,12 +57,10 @@ public class AudioEventListener extends AudioEventAdapter {
 			if (audioTrackMessage != null) {
 				audioPlayerManager.loadItem(audioTrackMessage.getAudioTrackInfoDTO().getIdentifier(),
 						new GeneralResultHandler(player, guild));
-				activityService.setActivity(guild.getJDA(), LISTENING, audioTrackInfo.title);
 				return;
 			}
 		}
 
-		activityService.setActivityDefault(guild.getJDA());
 	}
 
 	@Override
