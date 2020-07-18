@@ -66,11 +66,12 @@ public class AudioQueueService {
 	}
 
 	/**
-	 * Deletes the queue by the name.
-	 * @param queueName
+	 * Deletes a queue by the name.
+	 * @param queueName queue's name
+	 * @return true if the queue was deleted or it does not exist
 	 */
-	public void destroy(String queueName) {
-		rabbitAdmin.deleteQueue(queueName);
+	public boolean destroy(String queueName) {
+		return rabbitAdmin.deleteQueue(queueName);
 	}
 
 	/**

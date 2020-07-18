@@ -4,6 +4,7 @@ import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import org.springframework.amqp.core.Message;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * This object is used as body of a {@link Message} in order to transfer audio track info
@@ -76,6 +77,29 @@ public class AudioTrackInfoDTO implements Serializable {
 
 	public void setUri(String uri) {
 		this.uri = uri;
+	}
+
+	@Override
+	public String toString() {
+		return "AudioTrackInfoDTO{" + "title='" + title + '\'' + ", author='" + author + '\'' + ", length=" + length
+				+ ", identifier='" + identifier + '\'' + ", isStream=" + isStream + ", uri='" + uri + '\'' + '}';
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		AudioTrackInfoDTO that = (AudioTrackInfoDTO) o;
+		return length == that.length && isStream == that.isStream && Objects.equals(title, that.title)
+				&& Objects.equals(author, that.author) && Objects.equals(identifier, that.identifier)
+				&& Objects.equals(uri, that.uri);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(title, author, length, identifier, isStream, uri);
 	}
 
 }
