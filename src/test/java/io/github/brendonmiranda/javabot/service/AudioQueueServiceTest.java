@@ -42,7 +42,7 @@ public class AudioQueueServiceTest {
 
 	@Test
 	public void enqueue() throws InterruptedException {
-		LatchCountDownAndCallRealMethodAnswer answer = new LatchCountDownAndCallRealMethodAnswer(1);
+		LatchCountDownAndCallRealMethodAnswer answer = new LatchCountDownAndCallRealMethodAnswer(2);
 		AudioTrackMessageDTO audioTrackMessageDTO = getAudioTrackMessageDTO();
 		String queueName = "bar";
 
@@ -54,11 +54,13 @@ public class AudioQueueServiceTest {
 		doAnswer(answer).when(listener).foo(audioTrackMessageDTO);
 		given(audioTrackToAudioTrackMessageDTOConverter.convert(ArgumentMatchers.any(AudioTrack.class)))
 				.willReturn(audioTrackMessageDTO);
+
+		service.enqueue(queueName, mock(AudioTrack.class));
 		service.enqueue(queueName, mock(AudioTrack.class));
 
 		assertThat(answer.getLatch().await(10, TimeUnit.SECONDS)).isTrue();
 
-		verify(listener).foo(audioTrackMessageDTO);
+		verify(listener, times(2)).foo(audioTrackMessageDTO);
 	}
 
 	@Test
