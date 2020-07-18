@@ -8,15 +8,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import io.github.brendonmiranda.javabot.exception.AudioTrackException;
-import io.github.brendonmiranda.javabot.service.ActivityService;
 import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static net.dv8tion.jda.api.entities.Activity.ActivityType.LISTENING;
 
 /**
  * Listener for events of audio reproducing

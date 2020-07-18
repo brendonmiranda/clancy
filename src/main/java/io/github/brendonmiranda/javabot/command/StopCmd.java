@@ -3,13 +3,10 @@ package io.github.brendonmiranda.javabot.command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.javabot.listener.AudioSendHandlerImpl;
-import io.github.brendonmiranda.javabot.service.ActivityService;
-import io.github.brendonmiranda.javabot.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
