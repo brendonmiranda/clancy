@@ -1,4 +1,4 @@
-package io.github.brendonmiranda.javabot.service;
+package io.github.brendonmiranda.javabot.rabbit.listener;
 
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

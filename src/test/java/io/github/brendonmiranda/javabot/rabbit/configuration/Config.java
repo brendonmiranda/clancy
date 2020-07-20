@@ -1,6 +1,6 @@
 package io.github.brendonmiranda.javabot.rabbit.configuration;
 
-import io.github.brendonmiranda.javabot.service.Listener;
+import io.github.brendonmiranda.javabot.rabbit.listener.Listener;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.test.RabbitListenerTest;
 import org.springframework.context.annotation.Bean;

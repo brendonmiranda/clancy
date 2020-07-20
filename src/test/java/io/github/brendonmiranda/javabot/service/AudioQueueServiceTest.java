@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.javabot.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.javabot.dto.AudioTrackInfoDTO;
 import io.github.brendonmiranda.javabot.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.javabot.rabbit.listener.Listener;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.amqp.core.Queue;
