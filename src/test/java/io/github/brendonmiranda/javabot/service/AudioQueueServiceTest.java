@@ -70,7 +70,7 @@ public class AudioQueueServiceTest {
 		Queue queue = QueueBuilder.nonDurable().build();
 		String queueName = queue.getName();
 
-		assertThat(rabbitAdmin.declareQueue(queue)).isEqualTo(queue.getName());
+		assertThat(rabbitAdmin.declareQueue(queue)).isEqualTo(queueName);
 		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNotNull();
 		assertThat(service.destroy(queueName)).isTrue();
 		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
@@ -80,13 +80,17 @@ public class AudioQueueServiceTest {
 	@Test
 	public void destroy_whenQueueDoesNotExist() {
 
+		String queueName = createRandomQueue();
+
+		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
+		assertThat(service.destroy(queueName)).isTrue();
+		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
+
+	}
+
+	private String createRandomQueue(){
 		Queue queue = QueueBuilder.nonDurable().build();
-		String queueName = queue.getName();
-
-		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
-		assertThat(service.destroy(queue.getName())).isTrue();
-		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
-
+		return queue.getName();
 	}
 
 	private AudioTrackMessageDTO getAudioTrackMessageDTO() {

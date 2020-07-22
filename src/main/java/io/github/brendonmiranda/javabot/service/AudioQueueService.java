@@ -32,8 +32,8 @@ public class AudioQueueService {
 	private int ttlQueue;
 
 	/**
-	 * Enqueues an audio track message generated from the given audio track object in the
-	 * given queue. The routing key must be the queue name given the default binding
+	 * Enqueues an audio track message generated from the provided audio track object in the
+	 * specified queue. The routing key must be the queue name given the default binding
 	 * agreed in the configuration.
 	 * @param routingKey queue name
 	 * @param object audio track
