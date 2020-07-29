@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Manages rabbitMQ configuration declaring the connection and properties for rabbitMQ
+ * Admin and rabbitMQ Template, which are high-level abstraction of features from AMQP
+ * protocol.
+ *
  * @author brendonmiranda
  */
 @Configuration

@@ -14,7 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
+ * Provides functionalities to manage audio queues through the bot. This is a
+ * implementation of rabbit-mq features from Spring AMQP.
+ *
  * @author brendonmiranda
+ * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html
  */
 @Service
 public class AudioQueueService {
@@ -32,9 +36,9 @@ public class AudioQueueService {
 	private int ttlQueue;
 
 	/**
-	 * Enqueues an audio track message generated from the provided audio track object in the
-	 * specified queue. The routing key must be the queue name given the default binding
-	 * agreed in the configuration.
+	 * Enqueues an audio track message generated from the provided audio track object in
+	 * the specified queue. The routing key must be the queue name given the default
+	 * binding agreed in the configuration.
 	 * @param routingKey queue name
 	 * @param object audio track
 	 * @see RabbitConfiguration#rabbitAdmin

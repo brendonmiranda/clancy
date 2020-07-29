@@ -4,6 +4,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.bot.clancy.converter.AudioTrackToAudioTrackMessageDTOConverter;
 import io.github.brendonmiranda.bot.clancy.dto.AudioTrackInfoDTO;
 import io.github.brendonmiranda.bot.clancy.dto.AudioTrackMessageDTO;
+import io.github.brendonmiranda.bot.clancy.rabbit.configuration.Config;
 import io.github.brendonmiranda.bot.clancy.rabbit.listener.Listener;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -23,6 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+/**
+ * Integration tests for @{@link AudioQueueService} which is implementing rabbit-mq from
+ * Spring AQMP in order to provide message queuing functionalities.
+ *
+ * @author brendonmiranda
+ * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#testing
+ */
 @SpringBootTest
 public class AudioQueueServiceTest {
 
@@ -41,6 +49,17 @@ public class AudioQueueServiceTest {
 	@MockBean
 	private AudioTrackToAudioTrackMessageDTOConverter audioTrackToAudioTrackMessageDTOConverter;
 
+	/**
+	 * Enqueues two messages in a previously created queue {@link Config#myQueue()} and
+	 * ensure that was successfully sent by receiving them in the queue listener
+	 * {@link Config#listener()}.
+	 *
+	 * The goal is test {@link AudioQueueService#enqueue} which works asynchronously, so
+	 * we are using some Spring AMQP exclusive objects which is helping us to test it that
+	 * way.
+	 * @throws InterruptedException
+	 * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#mockito-answer
+	 */
 	@Test
 	public void enqueue() throws InterruptedException {
 		LatchCountDownAndCallRealMethodAnswer answer = new LatchCountDownAndCallRealMethodAnswer(2);
@@ -52,18 +71,23 @@ public class AudioQueueServiceTest {
 		Listener listener = harness.getSpy("foo");
 		assertThat(listener).isNotNull();
 
-		doAnswer(answer).when(listener).foo(audioTrackMessageDTO);
+		doAnswer(answer).when(listener).foo(audioTrackMessageDTO); // count down
 		given(audioTrackToAudioTrackMessageDTOConverter.convert(ArgumentMatchers.any(AudioTrack.class)))
 				.willReturn(audioTrackMessageDTO);
 
 		service.enqueue(queueName, mock(AudioTrack.class));
 		service.enqueue(queueName, mock(AudioTrack.class));
 
-		assertThat(answer.getLatch().await(10, TimeUnit.SECONDS)).isTrue();
+		assertThat(answer.getLatch().await(10, TimeUnit.SECONDS)).isTrue(); // latch
 
+		// ensure the messages has been received
 		verify(listener, times(2)).foo(audioTrackMessageDTO);
 	}
 
+	/**
+	 * It declare a random queue, destroy it in order to test
+	 * {@link AudioQueueService#destroy} and assert that it was deleted.
+	 */
 	@Test
 	public void destroy_whenQueueExists() {
 
@@ -71,28 +95,42 @@ public class AudioQueueServiceTest {
 		String queueName = queue.getName();
 
 		assertThat(rabbitAdmin.declareQueue(queue)).isEqualTo(queueName);
+
+		// determines if the queue exists on the broker
 		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNotNull();
+
 		assertThat(service.destroy(queueName)).isTrue();
 		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
 
 	}
 
+	/**
+	 * Tries to destroy a queue which does not exist in order to assert the return from
+	 * {@link AudioQueueService#destroy}.
+	 */
 	@Test
 	public void destroy_whenQueueDoesNotExist() {
 
-		String queueName = createRandomQueue();
+		String queueName = generateUniqueQueueName();
 
 		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
 		assertThat(service.destroy(queueName)).isTrue();
-		assertThat(rabbitAdmin.getQueueProperties(queueName)).isNull();
 
 	}
 
-	private String createRandomQueue(){
+	/**
+	 * It generates a unique queue name.
+	 * @return queue name
+	 */
+	private String generateUniqueQueueName() {
 		Queue queue = QueueBuilder.nonDurable().build();
 		return queue.getName();
 	}
 
+	/**
+	 * Stub audio track message object for testing.
+	 * @return stub audio track message dto object
+	 */
 	private AudioTrackMessageDTO getAudioTrackMessageDTO() {
 		AudioTrackInfoDTO trackInfo = new AudioTrackInfoDTO();
 		trackInfo.setTitle("Tentative");

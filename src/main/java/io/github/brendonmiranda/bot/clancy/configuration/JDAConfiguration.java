@@ -34,7 +34,7 @@ public class JDAConfiguration {
 
 	@Bean
 	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
-					NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
+			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
 
 		JDA jda = JDABuilder.createDefault(token).build();
 
