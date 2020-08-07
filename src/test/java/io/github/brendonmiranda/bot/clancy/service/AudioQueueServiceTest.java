@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
  * Spring AQMP in order to provide message queuing functionalities.
  *
  * @author brendonmiranda
- * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#testing
+ * @see <a href="https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#testing"/>
  */
 @SpringBootTest
 public class AudioQueueServiceTest {
@@ -58,7 +58,7 @@ public class AudioQueueServiceTest {
 	 * we are using some Spring AMQP exclusive objects which is helping us to test it that
 	 * way.
 	 * @throws InterruptedException
-	 * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#mockito-answer
+	 * @see <a href="https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#mockito-answer"/>
 	 */
 	@Test
 	public void enqueue() throws InterruptedException {

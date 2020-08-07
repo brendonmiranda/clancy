@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * implementation of rabbit-mq features from Spring AMQP.
  *
  * @author brendonmiranda
- * @see https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html
+ * @see <a href="https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html"/>
  */
 @Service
 public class AudioQueueService {
