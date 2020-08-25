@@ -8,7 +8,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
  * it on the tests.
  *
  * @author brendonmiranda
- * @see <a href="https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#test-harness"/>
+ * @see <a href=
+ * "https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#test-harness"/>
  */
 public class Listener {
 
