@@ -40,7 +40,7 @@ public class JDAConfiguration {
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, nowPlayingCmd, joinCmd)
-				.setActivity(listening("type !help")).build();
+				.setActivity(listening("type " + prefix + "help")).build();
 
 		jda.addEventListener(cmdListener, eventWaiter());
 
