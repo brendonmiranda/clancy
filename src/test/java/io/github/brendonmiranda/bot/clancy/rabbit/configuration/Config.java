@@ -19,7 +19,7 @@ public class Config {
 
 	@Bean
 	public Queue myQueue() {
-		return new Queue("bar");
+		return new Queue("bar", false, false, true);
 	}
 
 	@Bean
