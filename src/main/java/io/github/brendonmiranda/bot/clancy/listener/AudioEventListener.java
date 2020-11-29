@@ -54,7 +54,6 @@ public class AudioEventListener extends AudioEventAdapter {
 			if (audioTrackMessage != null) {
 				audioPlayerManager.loadItem(audioTrackMessage.getAudioTrackInfoDTO().getIdentifier(),
 						new GeneralResultHandler(player, guild));
-				return;
 			}
 		}
 

@@ -37,18 +37,18 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private final OrderedMenu.Builder builder;
 
-	private boolean ytsearch;
+	private final boolean ytSearch;
 
 	private final AudioQueueService audioQueueService;
 
 	public PlayResultHandler(AudioPlayer audioPlayer, CommandEvent event, AudioPlayerManager audioPlayerManager,
-			EventWaiter eventWaiter, Message message, boolean ytsearch, AudioQueueService audioQueueService) {
+			EventWaiter eventWaiter, Message message, boolean ytSearch, AudioQueueService audioQueueService) {
 		this.audioPlayer = audioPlayer;
 		this.event = event;
 		this.audioPlayerManager = audioPlayerManager;
 		this.eventWaiter = eventWaiter;
 		this.message = message;
-		this.ytsearch = ytsearch;
+		this.ytSearch = ytSearch;
 		this.builder = new OrderedMenu.Builder().allowTextInput(true).useNumbers().useCancelButton(true)
 				.setEventWaiter(eventWaiter).setTimeout(1, TimeUnit.MINUTES);
 		this.audioQueueService = audioQueueService;
@@ -64,7 +64,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	}
 
 	/**
-	 * Plays a track if none is being played otherwise it is enqueued.
+	 * Plays the track if none is being played otherwise it is enqueued.
 	 * @param track audio track
 	 */
 	public void queueTracks(AudioTrack track) {
@@ -135,7 +135,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		}
 		else {
-			event.replyError("Sorry, we are unable to load a playlist. Please, contact the bot admin.");
+			event.replyError("Sorry, I'm unable to load a playlist.");
 		}
 	}
 
@@ -146,7 +146,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	@Override
 	public void noMatches() {
 		// conditional to avoid loop
-		if (!ytsearch)
+		if (!ytSearch)
 			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new PlayResultHandler(audioPlayer, event,
 					audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
