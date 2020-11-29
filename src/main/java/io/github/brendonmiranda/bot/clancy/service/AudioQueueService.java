@@ -56,13 +56,13 @@ public class AudioQueueService {
 	/**
 	 * Receives an audio track message from the given queue if it exists, otherwise it
 	 * returns null.
-	 * @param queueName
+	 * @param queueName queue's name
 	 * @return audio track message
 	 */
 	public AudioTrackMessageDTO receive(String queueName) {
 		Object object = hasQueue(queueName, false) ? rabbitTemplate.receiveAndConvert(queueName) : null;
 
-		if (object != null && object instanceof AudioTrackMessageDTO) {
+		if (object instanceof AudioTrackMessageDTO) {
 			return (AudioTrackMessageDTO) object;
 		}
 
@@ -85,18 +85,19 @@ public class AudioQueueService {
 	 * @return
 	 */
 	private boolean hasQueue(String queueName, boolean createIfNotExist) {
+		boolean hasQueue = true;
+
 		// getQueueProperties() can be used to determine if a queue exists on the broker
 		if (rabbitAdmin.getQueueProperties(queueName) == null) {
 
 			if (createIfNotExist)
-				return createQueue(queueName) == null ? false : true;
+				hasQueue = createQueue(queueName) != null;
 			else
-				return false;
+				hasQueue = false;
 
 		}
-		else {
-			return true;
-		}
+
+		return hasQueue;
 	}
 
 	/**
