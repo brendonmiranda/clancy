@@ -7,6 +7,8 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import io.github.brendonmiranda.bot.clancy.listener.AudioEventListener;
 import io.github.brendonmiranda.bot.clancy.listener.PlayResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +47,14 @@ public class PlayCmd extends MusicCmd {
 		audioPlayer.addListener(audioEventListener);
 
 		event.reply("Searching...", (message) -> {
-			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), new PlayResultHandler(audioPlayer,
-					event, audioPlayerManager, eventWaiter, message, false, audioQueueService));
+
+			Guild guild = event.getGuild();
+			AudioManager audioManager = guild.getAudioManager();
+			PlayResultHandler playResultHandler = new PlayResultHandler(audioPlayer, guild, audioManager, event,
+					audioPlayerManager, eventWaiter, message, false, audioQueueService);
+
+			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), playResultHandler);
+
 		});
 
 	}

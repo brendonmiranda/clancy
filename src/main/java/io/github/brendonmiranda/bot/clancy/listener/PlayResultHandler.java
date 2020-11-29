@@ -13,6 +13,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,10 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	private static final Logger logger = LoggerFactory.getLogger(PlayResultHandler.class);
 
 	private final AudioPlayer audioPlayer;
+
+	private final Guild guild;
+
+	private final AudioManager audioManager;
 
 	private final CommandEvent event;
 
@@ -41,9 +46,12 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private final AudioQueueService audioQueueService;
 
-	public PlayResultHandler(AudioPlayer audioPlayer, CommandEvent event, AudioPlayerManager audioPlayerManager,
-			EventWaiter eventWaiter, Message message, boolean ytSearch, AudioQueueService audioQueueService) {
+	public PlayResultHandler(AudioPlayer audioPlayer, Guild guild, AudioManager audioManager, CommandEvent event,
+			AudioPlayerManager audioPlayerManager, EventWaiter eventWaiter, Message message, boolean ytSearch,
+			AudioQueueService audioQueueService) {
 		this.audioPlayer = audioPlayer;
+		this.guild = guild;
+		this.audioManager = audioManager;
 		this.event = event;
 		this.audioPlayerManager = audioPlayerManager;
 		this.eventWaiter = eventWaiter;
@@ -60,54 +68,53 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		logger.info("Track has loaded. Title: {}, author: {}, identifier: {}, source: {}", audioTrackInfo.title,
 				audioTrackInfo.author, audioTrackInfo.identifier, track.getSourceManager());
 
-		queueTracks(track);
+		manageTrack(track);
 	}
 
 	/**
 	 * Plays the track if none is being played otherwise it is enqueued.
 	 * @param track audio track
 	 */
-	public void queueTracks(AudioTrack track) {
+	public void manageTrack(AudioTrack track) {
 
-		/*
-		 * Object (Guild) to be recovered when necessary. Currently it is being used on
-		 * AudioEventListener
-		 */
-		Guild guild = event.getGuild();
+		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) audioManager.getSendingHandler();
+
+		// Store guild to be recovered when needed as we do on AudioEventListener
 		track.setUserData(guild);
 
-		AudioSendHandlerImpl audioSendHandler = (AudioSendHandlerImpl) event.getGuild().getAudioManager()
-				.getSendingHandler();
-
 		if (audioSendHandler == null) {
-			event.getGuild().getAudioManager().setSendingHandler(new AudioSendHandlerImpl(audioPlayer));
-			audioPlayer.playTrack(track);
-
-			event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+			audioManager.setSendingHandler(new AudioSendHandlerImpl(audioPlayer));
+			playTrack(this.audioPlayer, track);
 		}
 		else {
 			AudioPlayer audioPlayer = audioSendHandler.getAudioPlayer();
 
-			if (audioPlayer.getPlayingTrack() == null) {
-
-				audioPlayer.playTrack(track);
-
-				event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
-
-			}
-			else {
-
-				if (audioPlayer.isPaused()) {
-					event.replyWarning(
-							"The track **" + audioSendHandler.getAudioPlayer().getPlayingTrack().getInfo().title
-									+ "** is paused. Type `" + event.getClient().getPrefix() + "resume` to unpause!");
-				}
-
-				audioQueueService.enqueue(guild.getName(), track);
-
-				event.reply("Enqueued **" + track.getInfo().title + "**.");
-			}
+			if (audioPlayer.getPlayingTrack() != null)
+				queueTrack(audioPlayer, track);
+			else
+				playTrack(audioPlayer, track);
 		}
+	}
+
+	private void queueTrack(AudioPlayer audioPlayer, AudioTrack track) {
+
+		if (audioPlayer.isPaused()) {
+			event.replyWarning("The track **" + audioPlayer.getPlayingTrack().getInfo().title + "** is paused. Type `"
+					+ event.getClient().getPrefix() + "resume` to unpause!");
+		}
+
+		audioQueueService.enqueue(guild.getName(), track);
+
+		event.reply("Enqueued **" + track.getInfo().title + "**.");
+
+	}
+
+	private void playTrack(AudioPlayer audioPlayer, AudioTrack track) {
+
+		audioPlayer.playTrack(track);
+
+		event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+
 	}
 
 	/**
@@ -122,7 +129,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 			builder.setText("Search results for **" + event.getArgs() + "**:").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
-				queueTracks(audioTrack);
+				manageTrack(audioTrack);
 			}).setCancel((msg) -> {
 			}).setUsers(event.getAuthor());
 
@@ -147,8 +154,8 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	public void noMatches() {
 		// conditional to avoid loop
 		if (!ytSearch)
-			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new PlayResultHandler(audioPlayer, event,
-					audioPlayerManager, eventWaiter, message, true, audioQueueService));
+			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new PlayResultHandler(audioPlayer, guild,
+					audioManager, event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
 			event.replyError("Sorry, I couldn't find your track. Please, rephrase and try again.");
 	}
