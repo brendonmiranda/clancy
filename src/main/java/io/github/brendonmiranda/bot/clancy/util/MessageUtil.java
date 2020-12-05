@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class MessageUtil {
 
+	public static Color DEFAULT_COLOR = new Color(189, 52, 235);
+
 	public static MessageEmbed buildMessage(String description) {
 
 		return buildMessage(null, description);
@@ -20,7 +22,7 @@ public class MessageUtil {
 			builder.setTitle(title);
 
 		builder.setDescription(description);
-		builder.setColor(new Color(189, 52, 235));
+		builder.setColor(DEFAULT_COLOR);
 
 		return builder.build();
 	}

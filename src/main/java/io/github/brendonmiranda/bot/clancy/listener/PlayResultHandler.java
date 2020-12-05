@@ -133,11 +133,11 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		// todo: log playlist loaded
 		if (playlist.isSearchResult()) {
 
-			builder.setText("Search results for **" + event.getArgs() + "**:").setSelection((msg, i) -> {
+			builder.setDescription("Search `" + event.getArgs() + "`: \n").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
 				manageTrack(audioTrack);
 			}).setCancel((msg) -> {
-			}).setUsers(event.getAuthor());
+			}).setUsers(event.getAuthor()).setColor(MessageUtil.DEFAULT_COLOR);
 
 			for (int i = 0; i <= 4; i++) {
 				AudioTrack audioTrack = playlist.getTracks().get(i);
