@@ -11,8 +11,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,14 +100,15 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private void queueTrack(AudioPlayer audioPlayer, AudioTrack track) {
 
-		if (audioPlayer.isPaused()) {
-			event.replyWarning("The track **" + audioPlayer.getPlayingTrack().getInfo().title + "** is paused. Type `"
-					+ event.getClient().getPrefix() + "resume` to unpause!");
-		}
-
 		audioQueueService.enqueue(guild.getName(), track);
 
-		event.reply("Enqueued **" + track.getInfo().title + "**.");
+		event.reply(MessageUtil.buildMessage("Enqueued", track.getInfo().title));
+
+		if (audioPlayer.isPaused()) {
+			event.reply(MessageUtil.buildMessage("Alert", "The track `" + audioPlayer.getPlayingTrack().getInfo().title
+					+ "` is paused. \n\nType `" + event.getClient().getPrefix() + "resume` to unpause."));
+
+		}
 
 	}
 
@@ -113,7 +116,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioPlayer.playTrack(track);
 
-		event.reply("Playing **" + audioPlayer.getPlayingTrack().getInfo().title + "**.");
+		event.reply(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title));
 
 	}
 
@@ -127,11 +130,11 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		// todo: log playlist loaded
 		if (playlist.isSearchResult()) {
 
-			builder.setText("Search results for **" + event.getArgs() + "**:").setSelection((msg, i) -> {
+			builder.setDescription("Search `" + event.getArgs() + "`: \n").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
 				manageTrack(audioTrack);
 			}).setCancel((msg) -> {
-			}).setUsers(event.getAuthor());
+			}).setUsers(event.getAuthor()).setColor(MessageUtil.DEFAULT_COLOR);
 
 			for (int i = 0; i <= 4; i++) {
 				AudioTrack audioTrack = playlist.getTracks().get(i);
@@ -142,7 +145,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		}
 		else {
-			event.replyError("Sorry, I'm unable to load a playlist.");
+			event.reply(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist."));
 		}
 	}
 
@@ -157,7 +160,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new PlayResultHandler(audioPlayer, guild,
 					audioManager, event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
-			event.replyError("Sorry, I couldn't find your track. Please, rephrase and try again.");
+			event.reply(MessageUtil.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."));
 	}
 
 	@Override

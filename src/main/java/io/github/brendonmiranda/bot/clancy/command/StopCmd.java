@@ -3,6 +3,7 @@ package io.github.brendonmiranda.bot.clancy.command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class StopCmd extends MusicCmd {
 	public void command(CommandEvent event) {
 
 		stop(event.getGuild());
-		event.replySuccess("The player has stopped!");
+		event.reply(MessageUtil.buildMessage("The player has stopped."));
 	}
 
 	public void stop(Guild guild) {

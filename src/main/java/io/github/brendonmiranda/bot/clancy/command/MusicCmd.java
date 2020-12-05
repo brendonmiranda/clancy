@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -29,7 +30,7 @@ public abstract class MusicCmd extends Command {
 		 * validates this. A voice channel is achieved by the bot through Join command.
 		 */
 		if (audioManager.getConnectedChannel() == null) {
-			event.replyWarning("Type `" + event.getClient().getPrefix() + "join`");
+			event.reply(MessageUtil.buildMessage("Type `" + event.getClient().getPrefix() + "join`"));
 			return;
 		}
 
@@ -37,7 +38,7 @@ public abstract class MusicCmd extends Command {
 		 * It validates if the member who trigger the event is present in a voice channel.
 		 */
 		if (memberVoiceChannel == null) {
-			event.replyError("You must be in a voice channel.");
+			event.reply(MessageUtil.buildMessage("You must be in a voice channel."));
 			return;
 		}
 

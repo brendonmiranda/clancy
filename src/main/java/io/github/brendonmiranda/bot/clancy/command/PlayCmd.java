@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import io.github.brendonmiranda.bot.clancy.listener.AudioEventListener;
 import io.github.brendonmiranda.bot.clancy.listener.PlayResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class PlayCmd extends MusicCmd {
 		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
 		audioPlayer.addListener(audioEventListener);
 
-		event.reply("Searching...", (message) -> {
+		event.reply(MessageUtil.buildMessage("Searching..."), (message) -> {
 
 			Guild guild = event.getGuild();
 			AudioManager audioManager = guild.getAudioManager();
