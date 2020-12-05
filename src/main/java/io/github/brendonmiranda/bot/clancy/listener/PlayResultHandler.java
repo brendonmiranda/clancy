@@ -100,16 +100,15 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private void queueTrack(AudioPlayer audioPlayer, AudioTrack track) {
 
-		if (audioPlayer.isPaused()) {
-			event.reply(MessageUtil.buildMessage("Alert", "The track **" + audioPlayer.getPlayingTrack().getInfo().title
-					+ "** is paused. Type `" + event.getClient().getPrefix() + "resume` to unpause!"));
-		}
-
 		audioQueueService.enqueue(guild.getName(), track);
 
-		MessageEmbed messageEmbed = MessageUtil.buildMessage("Enqueued", track.getInfo().title);
+		event.reply(MessageUtil.buildMessage("Enqueued", track.getInfo().title));
 
-		event.reply(messageEmbed);
+		if (audioPlayer.isPaused()) {
+			event.reply(MessageUtil.buildMessage("Alert", "The track `" + audioPlayer.getPlayingTrack().getInfo().title
+					+ "` is paused. \n\nType `" + event.getClient().getPrefix() + "resume` to unpause."));
+
+		}
 
 	}
 
@@ -117,9 +116,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioPlayer.playTrack(track);
 
-		MessageEmbed messageEmbed = MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title);
-
-		event.reply(messageEmbed);
+		event.reply(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title));
 
 	}
 
