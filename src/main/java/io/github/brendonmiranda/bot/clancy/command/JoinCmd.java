@@ -1,6 +1,7 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -32,7 +33,7 @@ public class JoinCmd extends MusicCmd {
 
 		// It validates if the member who trigger the event is present in a voice channel.
 		if (memberVoiceChannel == null) {
-			event.replyError("You must be in a voice channel.");
+			event.reply(MessageUtil.buildMessage("You must be in a voice channel."));
 			return;
 		}
 

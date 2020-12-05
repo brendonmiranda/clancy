@@ -7,6 +7,7 @@ import io.github.brendonmiranda.bot.clancy.dto.AudioTrackMessageDTO;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.listener.GeneralResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class SkipCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
 		if (audioSendHandler == null) {
-			event.replyError("There is no track playing to skip.");
+			event.reply(MessageUtil.buildMessage("There is no track playing to skip."));
 			return;
 		}
 
@@ -59,7 +60,7 @@ public class SkipCmd extends MusicCmd {
 						new GeneralResultHandler(audioPlayer, guild));
 			}
 			else {
-				event.replyError("Your queue is empty.");
+				event.reply(MessageUtil.buildMessage("The queue is empty."));
 			}
 
 		}

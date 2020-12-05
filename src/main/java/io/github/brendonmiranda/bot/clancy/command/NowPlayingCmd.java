@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class NowPlayingCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.replyError("There is no track playing");
+			event.reply(MessageUtil.buildMessage("There is no track playing"));
 			return;
 		}
 
@@ -34,10 +35,10 @@ public class NowPlayingCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			AudioTrack audioTrack = audioPlayer.getPlayingTrack();
-			event.replySuccess("Now playing the track **" + audioTrack.getInfo().title + "**.");
+			event.reply(MessageUtil.buildMessage("Now playing", audioTrack.getInfo().title));
 		}
 		else {
-			event.replyWarning("There is no track playing");
+			event.reply(MessageUtil.buildMessage("There is no track playing"));
 		}
 	}
 
