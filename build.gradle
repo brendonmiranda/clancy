@@ -38,7 +38,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'net.dv8tion:JDA:4.2.0_226'
+	implementation 'net.dv8tion:JDA:4.2.0_227'
 	implementation 'com.jagrosh:jda-utilities:3.0.5'
 	implementation 'com.sedmelluq:lavaplayer:1.3.66'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
