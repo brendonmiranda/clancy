@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'org.springframework.boot' version '2.4.5'
 	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 	id 'java'
 	id "com.palantir.docker" version "0.25.0"
