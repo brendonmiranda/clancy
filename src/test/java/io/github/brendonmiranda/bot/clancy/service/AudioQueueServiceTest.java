@@ -87,7 +87,7 @@ public class AudioQueueServiceTest {
 	}
 
 	/**
-	 * It declare a random queue, destroy it in order to test
+	 * It declares a random queue, destroy it in order to test
 	 * {@link AudioQueueService#destroy} and assert that it was deleted.
 	 */
 	@Test
