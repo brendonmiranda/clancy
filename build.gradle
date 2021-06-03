@@ -63,4 +63,6 @@ docker {
 
 test {
 	useJUnitPlatform()
+	// it should pass all JVM options to the app started via test gradle task
+	systemProperties = System.properties // https://stackoverflow.com/questions/25079244/how-to-pass-jvm-options-from-bootrun/25079415
 }
