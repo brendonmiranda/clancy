@@ -3,7 +3,7 @@
 </p>
 <h3 align="center"><img src="https://i.imgur.com/hugrvCl.png" alt="clancy" height="150px"></h3>
 
-<p align="center">A Discord music bot made in Spring Boot and Java</p>
+<p align="center">A Discord Music Bot made in Spring Boot and Java</p>
 
 
 <!-- <img src="https://i.imgur.com/hugrvCl.png" alt="clancy" align="right" height="320px"> -->
