@@ -1,7 +1,7 @@
 <p align="center">
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-black.svg"></a>
 </p>
-<h3 align="center"><img src="https://i.imgur.com/hugrvCl.png" alt="clancy" height="320px"></h3>
+<h3 align="center"><img src="https://i.imgur.com/hugrvCl.png" alt="clancy" height="150px"></h3>
 
 <p align="center">A Discord music bot made in Spring Boot and Java</p>
 
