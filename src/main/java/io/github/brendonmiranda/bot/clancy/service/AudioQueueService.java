@@ -32,7 +32,7 @@ public class AudioQueueService {
 	@Autowired
 	private AudioTrackToAudioTrackMessageDTOConverter audioTrackToAudioTrackMessageDTOConverter;
 
-	@Value("${rabbit.queue.ttl}")
+	@Value("${rabbit.queue.ttl:86400000}")
 	private int ttlQueue;
 
 	/**
