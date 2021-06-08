@@ -27,14 +27,14 @@ public class ScheduledTasks {
 	@Autowired
 	private StopCmd stopCmd;
 
-	@Value("${inactive.threshold}")
+	@Value("${inactive.threshold:3600000}")
 	private long inactiveThreshold;
 
 	/**
 	 * Check guilds and remove inactive bots which is the ones that haven't played
 	 * anything in a period defined by {@link this#inactiveThreshold}.
 	 */
-	@Scheduled(fixedDelayString = "${inactive.task.fixed.delay}")
+	@Scheduled(fixedDelayString = "${inactive.task.fixed.delay:3600000}")
 	public void inactiveTask() {
 		List<Guild> guilds = jda.getGuilds();
 

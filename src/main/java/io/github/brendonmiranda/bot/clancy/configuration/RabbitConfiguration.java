@@ -33,10 +33,10 @@ public class RabbitConfiguration {
 	@Value("${rabbit.virtualhost}")
 	private String virtualHost;
 
-	@Value("${rabbit.connection.timeout}")
+	@Value("${rabbit.connection.timeout:30000}")
 	private int connectionTimeout;
 
-	@Value("${rabbit.requested.heartbeat}")
+	@Value("${rabbit.requested.heartbeat:30}")
 	private int requestedHeartBeat;
 
 	@Bean

@@ -23,13 +23,13 @@ import static net.dv8tion.jda.api.entities.Activity.listening;
 @Configuration
 public class JDAConfiguration {
 
-	@Value("${token}")
+	@Value("${bot.token}")
 	private String token;
 
-	@Value("${prefix}")
+	@Value("${bot.prefix}")
 	private String prefix;
 
-	@Value("${owner}")
+	@Value("${bot.owner}")
 	private Long owner;
 
 	@Bean
