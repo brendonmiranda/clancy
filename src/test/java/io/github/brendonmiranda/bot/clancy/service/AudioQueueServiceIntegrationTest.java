@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
  * "https://docs.spring.io/spring-amqp/docs/2.2.7.RELEASE/reference/html/#testing"/>
  */
 @SpringBootTest
-public class AudioQueueServiceTest {
+public class AudioQueueServiceIntegrationTest {
 
 	@Autowired
 	private AudioQueueService service;
@@ -77,12 +77,13 @@ public class AudioQueueServiceTest {
 		given(audioTrackToAudioTrackMessageDTOConverter.convert(ArgumentMatchers.any(AudioTrack.class)))
 				.willReturn(audioTrackMessageDTO);
 
+		// send twice
 		service.enqueue(queueName, mock(AudioTrack.class));
 		service.enqueue(queueName, mock(AudioTrack.class));
 
 		assertThat(answer.getLatch().await(10, TimeUnit.SECONDS)).isTrue(); // latch
 
-		// ensure the messages has been received
+		// ensure the messages has been received twice
 		verify(listener, times(2)).foo(audioTrackMessageDTO);
 	}
 
@@ -135,8 +136,8 @@ public class AudioQueueServiceTest {
 	 */
 	private AudioTrackMessageDTO getAudioTrackMessageDTO() {
 		AudioTrackInfoDTO trackInfo = new AudioTrackInfoDTO();
-		trackInfo.setTitle("Tentative");
-		trackInfo.setAuthor("System of a Down");
+		trackInfo.setTitle("Three little birds");
+		trackInfo.setAuthor("Bob");
 		trackInfo.setLength(201600L);
 		trackInfo.setIdentifier("Qxxum5ungsA");
 		trackInfo.setStream(true);

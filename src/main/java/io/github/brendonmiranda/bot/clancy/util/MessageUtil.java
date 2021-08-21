@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
 
+/**
+ * @author brendonmiranda
+ */
 public class MessageUtil {
 
 	public static Color DEFAULT_COLOR = new Color(189, 52, 235);

@@ -16,10 +16,6 @@ public class AudioTrackInfoToAudioTrackInfoDTOConverter implements Converter<Aud
 	@Override
 	public AudioTrackInfoDTO convert(AudioTrackInfo source) {
 
-		if (source == null)
-			throw new ConversionException(
-					"An error occurred while converting AudioTrackInfo to AudioTrackInfoDTO: AudioTrackInfo null.");
-
 		AudioTrackInfoDTO audioTrackInfoDTO = new AudioTrackInfoDTO();
 		audioTrackInfoDTO.setTitle(source.title);
 		audioTrackInfoDTO.setAuthor(source.author);

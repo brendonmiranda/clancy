@@ -8,10 +8,10 @@ buildscript {
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.5.0'
+	id 'org.springframework.boot' version '2.5.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id "com.palantir.docker" version "0.26.0"
+	id "com.palantir.docker" version "0.28.0"
 }
 
 apply plugin: 'io.spring.javaformat'
@@ -42,9 +42,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'net.dv8tion:JDA:4.2.1_272'
+	implementation 'net.dv8tion:JDA:4.3.0_310'
 	implementation 'com.jagrosh:jda-utilities:3.0.5'
-	implementation 'com.sedmelluq:lavaplayer:1.3.77'
+	implementation 'com.sedmelluq:lavaplayer:1.3.78'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

@@ -20,13 +20,9 @@ public class AudioTrackToAudioTrackMessageDTOConverter implements Converter<Audi
 	@Override
 	public AudioTrackMessageDTO convert(AudioTrack source) {
 
-		if (source == null)
-			throw new ConversionException(
-					"An error occurred while converting AudioTrack to AudioTrackMessageDTO: AudioTrack null.");
-
 		Object object = source.getUserData();
 
-		if (object == null || !(object instanceof Guild))
+		if (!(object instanceof Guild))
 			throw new ConversionException(
 					"An error occurred while converting AudioTrack to AudioTrackMessageDTO: Unexpected UserData object.");
 
