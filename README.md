@@ -1,5 +1,6 @@
-<p>
+<p align="center">
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-black.svg"></a>
+ <a href="https://discord.gg/UCfNTczQKm"><img alt="Discord" src="https://img.shields.io/discord/746743953755209768?label=&logo=discord&logoColor=white&color=black&labelColor=black"></a>
 </p>
 
 <p align="center">A Discord Music Bot Made in Spring Boot and Java</p>
