@@ -3,7 +3,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.29")
+		classpath("io.spring.javaformat:spring-javaformat-gradle-plugin:0.0.30")
 	}
 }
 
