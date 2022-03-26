@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,11 @@ public class ResumeCmd extends MusicCmd {
 	public ResumeCmd() {
 		this.name = "resume";
 		this.help = "resumes the current song";
+	}
+
+	@Override
+	protected void execute(SlashCommandEvent slashCommandEvent) {
+
 	}
 
 	public void command(CommandEvent event) {

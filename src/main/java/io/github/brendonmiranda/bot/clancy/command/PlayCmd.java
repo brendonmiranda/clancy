@@ -9,6 +9,7 @@ import io.github.brendonmiranda.bot.clancy.listener.PlayResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,11 @@ public class PlayCmd extends MusicCmd {
 	public PlayCmd() {
 		this.name = "play";
 		this.help = "plays or queue a song";
+	}
+
+	@Override
+	protected void execute(SlashCommandEvent slashCommandEvent) {
+
 	}
 
 	@Override

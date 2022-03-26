@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,11 @@ public class NowPlayingCmd extends MusicCmd {
 	public NowPlayingCmd() {
 		this.name = "now";
 		this.help = "shows the song which is playing in the moment";
+	}
+
+	@Override
+	protected void execute(SlashCommandEvent slashCommandEvent) {
+
 	}
 
 	@Override

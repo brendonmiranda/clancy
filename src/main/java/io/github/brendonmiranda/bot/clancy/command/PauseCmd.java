@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,6 +16,11 @@ public class PauseCmd extends MusicCmd {
 	public PauseCmd() {
 		this.name = "pause";
 		this.help = "pauses the current song";
+	}
+
+	@Override
+	protected void execute(SlashCommandEvent slashCommandEvent) {
+
 	}
 
 	public void command(CommandEvent event) {

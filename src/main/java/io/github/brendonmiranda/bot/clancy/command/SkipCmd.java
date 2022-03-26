@@ -9,6 +9,7 @@ import io.github.brendonmiranda.bot.clancy.listener.GeneralResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class SkipCmd extends MusicCmd {
 	public SkipCmd() {
 		this.name = "skip";
 		this.help = "skips the current song";
+	}
+
+	@Override
+	protected void execute(SlashCommandEvent slashCommandEvent) {
+
 	}
 
 	@Override

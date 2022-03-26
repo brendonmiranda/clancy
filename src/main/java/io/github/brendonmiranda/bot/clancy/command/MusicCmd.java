@@ -1,7 +1,7 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 /**
  * @author brendonmiranda
  */
-public abstract class MusicCmd extends Command {
+public abstract class MusicCmd extends SlashCommand {
 
 	public MusicCmd() {
 		this.guildOnly = true;
