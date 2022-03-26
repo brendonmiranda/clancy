@@ -47,11 +47,19 @@ public class AudioEventListener extends AudioEventAdapter {
 
 		Guild guild = (Guild) track.getUserData();
 
+		if (endReason.equals(AudioTrackEndReason.LOAD_FAILED))
+			logger.error("Unable to load the audio, this means that the track failed to start.");
+
 		if (!endReason.equals(AudioTrackEndReason.STOPPED)) {
+			// get the next audio in the queue if there is one
 			AudioTrackMessageDTO audioTrackMessage = audioQueueService.receive(guild.getName());
 
-			// Plays the next track from queue
 			if (audioTrackMessage != null) {
+				logger.info("Loading the next track in the queue. Title: {}, author: {}, identifier: {}",
+						audioTrackMessage.getAudioTrackInfoDTO().getTitle(),
+						audioTrackMessage.getAudioTrackInfoDTO().getAuthor(),
+						audioTrackMessage.getAudioTrackInfoDTO().getIdentifier());
+				// plays it
 				audioPlayerManager.loadItem(audioTrackMessage.getAudioTrackInfoDTO().getIdentifier(),
 						new GeneralResultHandler(player, guild));
 			}
