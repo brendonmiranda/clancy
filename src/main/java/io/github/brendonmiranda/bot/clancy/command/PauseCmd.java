@@ -18,16 +18,11 @@ public class PauseCmd extends MusicCmd {
 		this.help = "pauses the current song";
 	}
 
-	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
-
-	}
-
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing to pause."));
+			event.reply("There is no track playing to pause.");
 			return;
 		}
 
@@ -36,15 +31,15 @@ public class PauseCmd extends MusicCmd {
 		if (audioPlayer.isPaused()) {
 			// todo: instantiate ResumeCmd and use it instead
 			audioPlayer.setPaused(false);
-			event.reply(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title));
+			event.reply("Resumed: " + audioPlayer.getPlayingTrack().getInfo().title).queue();
 			return;
 		}
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			audioPlayer.setPaused(true);
 
-			event.reply(MessageUtil.buildMessage("Paused", audioPlayer.getPlayingTrack().getInfo().title
-					+ ". \n\nType `" + event.getClient().getPrefix() + "resume` to unpause."));
+			event.reply("Paused: " + audioPlayer.getPlayingTrack().getInfo().title + ". \n\nType `"
+					+ event.getCommandString() + "resume` to unpause.").queue();
 		}
 	}
 

@@ -10,6 +10,7 @@ import java.awt.*;
  */
 public class MessageUtil {
 
+	// todo: check this class later
 	public static Color DEFAULT_COLOR = new Color(189, 52, 235);
 
 	public static MessageEmbed buildMessage(String description) {

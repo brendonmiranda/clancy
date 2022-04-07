@@ -42,28 +42,30 @@ public class PlayCmd extends MusicCmd {
 	}
 
 	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
+	public void command(SlashCommandEvent slashCommandEvent) {
 
 	}
 
-	@Override
-	public void command(CommandEvent event) {
-		logger.debug("PlayCmd loading track: {}", event.getArgs());
-
-		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
-		audioPlayer.addListener(audioEventListener);
-
-		event.reply(MessageUtil.buildMessage("Searching..."), (message) -> {
-
-			Guild guild = event.getGuild();
-			AudioManager audioManager = guild.getAudioManager();
-			PlayResultHandler playResultHandler = new PlayResultHandler(audioPlayer, guild, audioManager, event,
-					audioPlayerManager, eventWaiter, message, false, audioQueueService);
-
-			audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(), playResultHandler);
-
-		});
-
-	}
+	// @Override
+	// public void command(CommandEvent event) {
+	// logger.debug("PlayCmd loading track: {}", event.getArgs());
+	//
+	// AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
+	// audioPlayer.addListener(audioEventListener);
+	//
+	// event.reply(MessageUtil.buildMessage("Searching..."), (message) -> {
+	//
+	// Guild guild = event.getGuild();
+	// AudioManager audioManager = guild.getAudioManager();
+	// PlayResultHandler playResultHandler = new PlayResultHandler(audioPlayer, guild,
+	// audioManager, event,
+	// audioPlayerManager, eventWaiter, message, false, audioQueueService);
+	//
+	// audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(),
+	// playResultHandler);
+	//
+	// });
+	//
+	// }
 
 }

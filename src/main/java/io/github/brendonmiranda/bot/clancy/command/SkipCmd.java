@@ -35,18 +35,13 @@ public class SkipCmd extends MusicCmd {
 	}
 
 	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
-
-	}
-
-	@Override
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 
 		Guild guild = getGuild(event);
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing to skip."));
+			event.reply("There is no track playing to skip.").queue();
 			return;
 		}
 
@@ -66,7 +61,7 @@ public class SkipCmd extends MusicCmd {
 						new GeneralResultHandler(audioPlayer, guild));
 			}
 			else {
-				event.reply(MessageUtil.buildMessage("The queue is empty."));
+				event.reply("The queue is empty.").queue();
 			}
 
 		}

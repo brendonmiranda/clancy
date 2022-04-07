@@ -24,16 +24,11 @@ public class NowPlayingCmd extends MusicCmd {
 	}
 
 	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
-
-	}
-
-	@Override
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing."));
+			event.reply("There is no track playing.").queue();
 			return;
 		}
 
@@ -41,10 +36,10 @@ public class NowPlayingCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			AudioTrack audioTrack = audioPlayer.getPlayingTrack();
-			event.reply(MessageUtil.buildMessage("Playing", audioTrack.getInfo().title));
+			event.reply("Playing: " + audioTrack.getInfo().title).queue();
 		}
 		else {
-			event.reply(MessageUtil.buildMessage("There is no track playing."));
+			event.reply("There is no track playing.").queue();
 		}
 	}
 

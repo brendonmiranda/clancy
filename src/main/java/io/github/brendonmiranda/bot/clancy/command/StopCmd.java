@@ -24,17 +24,13 @@ public class StopCmd extends MusicCmd {
 		this.help = "stops the current song";
 	}
 
-	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
-
-	}
-
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 
 		stop(event.getGuild());
-		event.reply(MessageUtil.buildMessage("The player has stopped."));
+		event.reply("The player has stopped.").queue();
 	}
 
+	// stop method has been separated to allow reuse of it in the code
 	public void stop(Guild guild) {
 
 		AudioManager audioManager = getAudioManager(guild);

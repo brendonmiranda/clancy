@@ -22,16 +22,11 @@ public class ResumeCmd extends MusicCmd {
 		this.help = "resumes the current song";
 	}
 
-	@Override
-	protected void execute(SlashCommandEvent slashCommandEvent) {
-
-	}
-
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track to resume."));
+			event.reply("There is no track to resume.").queue();
 			return;
 		}
 
@@ -39,7 +34,7 @@ public class ResumeCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null && audioPlayer.isPaused()) {
 			audioPlayer.setPaused(false);
-			event.reply(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title));
+			event.reply("Resumed: " + audioPlayer.getPlayingTrack().getInfo().title).queue();
 		}
 
 	}
