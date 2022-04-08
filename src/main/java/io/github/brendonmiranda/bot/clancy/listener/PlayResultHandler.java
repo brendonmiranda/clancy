@@ -165,6 +165,8 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	@Override
 	public void loadFailed(final FriendlyException exception) {
+		logger.error("Loading audio has failed. Severity: {}.", exception.severity);
+		throw exception;
 	}
 
 }
