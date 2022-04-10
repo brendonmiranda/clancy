@@ -53,7 +53,7 @@ public class JoinCmd extends MusicCmd {
 
 		audioManager.openAudioConnection(memberVoiceChannel);
 
-		event.reply("What's up!").queue();
+		event.replyEmbeds(MessageUtil.buildMessage("What's up!")).queue();
 	}
 
 }

@@ -30,7 +30,7 @@ public class PlayCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayCmd.class);
 
-	public static final String MUSIC_ARG = "song";
+	public static final String MUSIC_ARG = "search";
 
 	@Autowired
 	private AudioQueueService audioQueueService;
@@ -46,10 +46,10 @@ public class PlayCmd extends MusicCmd {
 
 	public PlayCmd() {
 		this.name = "play";
-		this.help = "plays or queue a song";
+		this.help = "it plays or queues a song";
 
 		this.options = Collections
-				.singletonList(new OptionData(OptionType.STRING, "song", "The song you wanna play").setRequired(true));
+				.singletonList(new OptionData(OptionType.STRING, MUSIC_ARG, "What you wanna play ?").setRequired(true));
 	}
 
 	@Override

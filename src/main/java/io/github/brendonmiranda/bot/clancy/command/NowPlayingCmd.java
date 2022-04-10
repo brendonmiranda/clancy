@@ -36,7 +36,7 @@ public class NowPlayingCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			AudioTrack audioTrack = audioPlayer.getPlayingTrack();
-			event.reply("Playing: " + audioTrack.getInfo().title).queue();
+			event.replyEmbeds(MessageUtil.buildMessage("Playing", audioTrack.getInfo().title)).queue();
 		}
 		else {
 			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing.")).queue();

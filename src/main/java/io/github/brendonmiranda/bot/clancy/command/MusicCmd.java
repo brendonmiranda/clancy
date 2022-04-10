@@ -30,7 +30,7 @@ public abstract class MusicCmd extends SlashCommand {
 		 * validates this. A voice channel is reached by the bot through the Join command.
 		 */
 		if (audioManager.getConnectedChannel() == null) {
-			event.replyEmbeds(MessageUtil.buildMessage("Type `" + event.getCommandString() + "join`")).queue();
+			event.replyEmbeds(MessageUtil.buildMessage("Type `/join`")).queue();
 			return;
 		}
 
