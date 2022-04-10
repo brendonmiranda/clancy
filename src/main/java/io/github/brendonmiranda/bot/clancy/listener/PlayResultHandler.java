@@ -119,7 +119,9 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioPlayer.playTrack(track);
 
-		event.replyEmbeds(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title)).queue();
+		event.getChannel()
+				.sendMessageEmbeds(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title))
+				.queue();
 
 	}
 
@@ -156,7 +158,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	/**
 	 * Loads a "playlist" made of the search results when the attempt of loading on
-	 * PlayCmd doesn't match. In case of fail it returns a error message.
+	 * PlayCmd doesn't match. In case of fail it returns an error message.
 	 */
 	@Override
 	public void noMatches() {
