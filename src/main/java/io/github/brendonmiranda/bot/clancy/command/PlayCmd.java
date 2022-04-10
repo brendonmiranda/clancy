@@ -1,6 +1,5 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -9,12 +8,19 @@ import io.github.brendonmiranda.bot.clancy.listener.PlayResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.function.Consumer;
 
 /**
  * @author brendonmiranda
@@ -23,6 +29,8 @@ import org.springframework.stereotype.Component;
 public class PlayCmd extends MusicCmd {
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayCmd.class);
+
+	public static final String MUSIC_ARG = "song";
 
 	@Autowired
 	private AudioQueueService audioQueueService;
@@ -39,33 +47,35 @@ public class PlayCmd extends MusicCmd {
 	public PlayCmd() {
 		this.name = "play";
 		this.help = "plays or queue a song";
+
+		this.options = Collections
+				.singletonList(new OptionData(OptionType.STRING, "song", "The song you wanna play").setRequired(true));
 	}
 
 	@Override
-	public void command(SlashCommandEvent slashCommandEvent) {
+	public void command(SlashCommandEvent event) {
+		OptionMapping option = event.getOption(MUSIC_ARG);
+		String args = option.getAsString();
+		logger.debug("PlayCmd loading track: {}", args);
+
+		AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
+		audioPlayer.addListener(audioEventListener);
+
+		Consumer<Message> success = (message) -> {
+
+			Guild guild = event.getGuild();
+			AudioManager audioManager = guild.getAudioManager();
+			PlayResultHandler playResultHandler = new PlayResultHandler(audioPlayer, guild, audioManager, event,
+					audioPlayerManager, eventWaiter, message, false, audioQueueService);
+
+			audioPlayerManager.loadItemOrdered(event.getGuild(), args, playResultHandler);
+
+		};
+
+		event.replyEmbeds(MessageUtil.buildMessage("Searching...")).queue(interactionHook -> {
+			interactionHook.retrieveOriginal().queue(success);
+		});
 
 	}
-
-	// @Override
-	// public void command(CommandEvent event) {
-	// logger.debug("PlayCmd loading track: {}", event.getArgs());
-	//
-	// AudioPlayer audioPlayer = audioPlayerManager.createPlayer();
-	// audioPlayer.addListener(audioEventListener);
-	//
-	// event.reply(MessageUtil.buildMessage("Searching..."), (message) -> {
-	//
-	// Guild guild = event.getGuild();
-	// AudioManager audioManager = guild.getAudioManager();
-	// PlayResultHandler playResultHandler = new PlayResultHandler(audioPlayer, guild,
-	// audioManager, event,
-	// audioPlayerManager, eventWaiter, message, false, audioQueueService);
-	//
-	// audioPlayerManager.loadItemOrdered(event.getGuild(), event.getArgs(),
-	// playResultHandler);
-	//
-	// });
-	//
-	// }
 
 }
