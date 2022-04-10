@@ -39,7 +39,7 @@ public class PauseCmd extends MusicCmd {
 			audioPlayer.setPaused(true);
 
 			event.replyEmbeds(MessageUtil.buildMessage("Paused", audioPlayer.getPlayingTrack().getInfo().title
-					+ ". \n\nType `" + event.getCommandString() + "resume` to unpause.")).queue();
+					+ ". \n\nType `/resume` to unpause.")).queue();
 		}
 	}
 
