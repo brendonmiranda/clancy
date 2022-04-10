@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,28 +18,28 @@ public class PauseCmd extends MusicCmd {
 		this.help = "pauses the current song";
 	}
 
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing to pause."));
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing to pause.")).queue();
 			return;
 		}
 
 		AudioPlayer audioPlayer = getAudioPlayer(audioSendHandler);
 
 		if (audioPlayer.isPaused()) {
-			// todo: instantiate ResumeCmd and use it instead
 			audioPlayer.setPaused(false);
-			event.reply(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title));
+			event.replyEmbeds(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title))
+					.queue();
 			return;
 		}
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			audioPlayer.setPaused(true);
 
-			event.reply(MessageUtil.buildMessage("Paused", audioPlayer.getPlayingTrack().getInfo().title
-					+ ". \n\nType `" + event.getClient().getPrefix() + "resume` to unpause."));
+			event.replyEmbeds(MessageUtil.buildMessage("Paused", audioPlayer.getPlayingTrack().getInfo().title
+					+ ". \n\nType `" + event.getCommandString() + "resume` to unpause.")).queue();
 		}
 	}
 

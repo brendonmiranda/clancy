@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,12 +24,13 @@ public class StopCmd extends MusicCmd {
 		this.help = "stops the current song";
 	}
 
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 
 		stop(event.getGuild());
-		event.reply(MessageUtil.buildMessage("The player has stopped."));
+		event.replyEmbeds(MessageUtil.buildMessage("The player has stopped.")).queue();
 	}
 
+	// stop method has been separated to allow reuse of it in the code
 	public void stop(Guild guild) {
 
 		AudioManager audioManager = getAudioManager(guild);

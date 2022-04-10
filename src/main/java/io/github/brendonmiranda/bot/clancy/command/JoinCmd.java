@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,34 +20,40 @@ public class JoinCmd extends MusicCmd {
 
 	public JoinCmd() {
 		this.name = "join";
-		this.help = "joins you on the channel";
+		this.help = "it calls the bot to join the channel";
 	}
 
 	/**
-	 * It was overrode in order to avoid validations from MusicCmd which must not be
-	 * applied to Join Command.
-	 * @param event
+	 * It has been overridden to avoid validations from MusicCmd execute method which must
+	 * not be applied to Join Command.
+	 * @param event event
 	 */
 	@Override
-	public void execute(CommandEvent event) {
-		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+	protected void execute(SlashCommandEvent event) {
+		logger.debug("Performing validations on join command.");
 
-		// It validates if the member who trigger the event is present in a voice channel.
+		VoiceChannel memberVoiceChannel = getChannel(event);
+
+		// it validates if the member who triggers the event is present in a voice
+		// channel.
 		if (memberVoiceChannel == null) {
-			event.reply(MessageUtil.buildMessage("You must be in a voice channel."));
+			event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
 			return;
 		}
 
 		command(event);
+
 	}
 
 	@Override
-	public void command(CommandEvent event) {
-		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+	public void command(SlashCommandEvent event) {
+		VoiceChannel memberVoiceChannel = getChannel(event);
 		Guild guild = getGuild(event);
 		AudioManager audioManager = getAudioManager(guild);
 
 		audioManager.openAudioConnection(memberVoiceChannel);
+
+		event.replyEmbeds(MessageUtil.buildMessage("What's up!")).queue();
 	}
 
 }

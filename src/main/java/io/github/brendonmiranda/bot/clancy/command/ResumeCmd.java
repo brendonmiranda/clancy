@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,11 +22,11 @@ public class ResumeCmd extends MusicCmd {
 		this.help = "resumes the current song";
 	}
 
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track to resume."));
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track to resume.")).queue();
 			return;
 		}
 
@@ -33,7 +34,8 @@ public class ResumeCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null && audioPlayer.isPaused()) {
 			audioPlayer.setPaused(false);
-			event.reply(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title));
+			event.replyEmbeds(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title))
+					.queue();
 		}
 
 	}

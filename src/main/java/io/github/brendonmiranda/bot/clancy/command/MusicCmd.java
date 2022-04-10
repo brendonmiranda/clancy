@@ -1,18 +1,18 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.Command;
-import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 /**
  * @author brendonmiranda
  */
-public abstract class MusicCmd extends Command {
+public abstract class MusicCmd extends SlashCommand {
 
 	public MusicCmd() {
 		this.guildOnly = true;
@@ -20,17 +20,17 @@ public abstract class MusicCmd extends Command {
 	}
 
 	@Override
-	protected void execute(CommandEvent event) {
+	protected void execute(SlashCommandEvent event) {
 
-		AudioManager audioManager = event.getGuild().getAudioManager();
-		VoiceChannel memberVoiceChannel = event.getEvent().getMember().getVoiceState().getChannel();
+		AudioManager audioManager = getAudioManager(event.getGuild());
+		VoiceChannel memberVoiceChannel = getChannel(event);
 
 		/*
 		 * To execute any music command the bot needs to be in a voice channel. It
-		 * validates this. A voice channel is achieved by the bot through Join command.
+		 * validates this. A voice channel is reached by the bot through the Join command.
 		 */
 		if (audioManager.getConnectedChannel() == null) {
-			event.reply(MessageUtil.buildMessage("Type `" + event.getClient().getPrefix() + "join`"));
+			event.replyEmbeds(MessageUtil.buildMessage("Type `/join`")).queue();
 			return;
 		}
 
@@ -38,7 +38,7 @@ public abstract class MusicCmd extends Command {
 		 * It validates if the member who trigger the event is present in a voice channel.
 		 */
 		if (memberVoiceChannel == null) {
-			event.reply(MessageUtil.buildMessage("You must be in a voice channel."));
+			event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
 			return;
 		}
 
@@ -53,7 +53,7 @@ public abstract class MusicCmd extends Command {
 		return audioSendHandler.getAudioPlayer();
 	}
 
-	protected Guild getGuild(CommandEvent event) {
+	protected Guild getGuild(SlashCommandEvent event) {
 		return event.getGuild();
 	}
 
@@ -61,6 +61,10 @@ public abstract class MusicCmd extends Command {
 		return guild.getAudioManager();
 	}
 
-	public abstract void command(CommandEvent event);
+	protected VoiceChannel getChannel(SlashCommandEvent event) {
+		return event.getMember().getVoiceState().getChannel();
+	}
+
+	public abstract void command(SlashCommandEvent event);
 
 }

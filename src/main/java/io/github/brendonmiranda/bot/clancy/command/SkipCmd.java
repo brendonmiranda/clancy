@@ -9,6 +9,7 @@ import io.github.brendonmiranda.bot.clancy.listener.GeneralResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,13 @@ public class SkipCmd extends MusicCmd {
 	}
 
 	@Override
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 
 		Guild guild = getGuild(event);
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing to skip."));
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing to skip.")).queue();
 			return;
 		}
 
@@ -60,7 +61,7 @@ public class SkipCmd extends MusicCmd {
 						new GeneralResultHandler(audioPlayer, guild));
 			}
 			else {
-				event.reply(MessageUtil.buildMessage("The queue is empty."));
+				event.replyEmbeds(MessageUtil.buildMessage("The queue is empty.")).queue();
 			}
 
 		}

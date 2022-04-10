@@ -1,6 +1,5 @@
 package io.github.brendonmiranda.bot.clancy.listener;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -14,12 +13,15 @@ import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
+
+import static io.github.brendonmiranda.bot.clancy.command.PlayCmd.MUSIC_ARG;
 
 /**
  * @author brendonmiranda
@@ -34,7 +36,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private final AudioManager audioManager;
 
-	private final CommandEvent event;
+	private final SlashCommandEvent event;
 
 	private final AudioPlayerManager audioPlayerManager;
 
@@ -48,7 +50,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 	private final AudioQueueService audioQueueService;
 
-	public PlayResultHandler(AudioPlayer audioPlayer, Guild guild, AudioManager audioManager, CommandEvent event,
+	public PlayResultHandler(AudioPlayer audioPlayer, Guild guild, AudioManager audioManager, SlashCommandEvent event,
 			AudioPlayerManager audioPlayerManager, EventWaiter eventWaiter, Message message, boolean ytSearch,
 			AudioQueueService audioQueueService) {
 		this.audioPlayer = audioPlayer;
@@ -102,11 +104,12 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioQueueService.enqueue(guild.getName(), track);
 
-		event.reply(MessageUtil.buildMessage("Enqueued", track.getInfo().title));
+		event.replyEmbeds(MessageUtil.buildMessage("Enqueued", track.getInfo().title)).queue();
 
 		if (audioPlayer.isPaused()) {
-			event.reply(MessageUtil.buildMessage("Alert", "The track `" + audioPlayer.getPlayingTrack().getInfo().title
-					+ "` is paused. \n\nType `" + event.getClient().getPrefix() + "resume` to unpause."));
+			event.replyEmbeds(MessageUtil.buildMessage("Alert", "The track `"
+					+ audioPlayer.getPlayingTrack().getInfo().title + "` is paused. \n\nType `/resume` to unpause."))
+					.queue();
 
 		}
 
@@ -116,7 +119,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioPlayer.playTrack(track);
 
-		event.reply(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title));
+		event.replyEmbeds(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title)).queue();
 
 	}
 
@@ -126,15 +129,17 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	 */
 	@Override
 	public void playlistLoaded(final AudioPlaylist playlist) {
+		OptionMapping option = event.getOption(MUSIC_ARG);
+		String args = option.getAsString();
 
 		// todo: log playlist loaded
 		if (playlist.isSearchResult()) {
 
-			builder.setDescription("Search `" + event.getArgs() + "`: \n").setSelection((msg, i) -> {
+			builder.setDescription("Search `" + args + "`: \n").setSelection((msg, i) -> {
 				AudioTrack audioTrack = playlist.getTracks().get(i - 1);
 				manageTrack(audioTrack);
 			}).setCancel((msg) -> {
-			}).setUsers(event.getAuthor()).setColor(MessageUtil.DEFAULT_COLOR);
+			}).setUsers(event.getUser()).setColor(MessageUtil.DEFAULT_COLOR);
 
 			for (int i = 0; i <= 4; i++) {
 				AudioTrack audioTrack = playlist.getTracks().get(i);
@@ -145,7 +150,7 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		}
 		else {
-			event.reply(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist."));
+			event.replyEmbeds(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist.")).queue();
 		}
 	}
 
@@ -155,16 +160,23 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 	 */
 	@Override
 	public void noMatches() {
+		OptionMapping option = event.getOption(MUSIC_ARG);
+		String args = option.getAsString();
+
 		// conditional to avoid loop
 		if (!ytSearch)
-			audioPlayerManager.loadItem("ytsearch:" + event.getArgs(), new PlayResultHandler(audioPlayer, guild,
-					audioManager, event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
+			audioPlayerManager.loadItem("ytsearch:" + args, new PlayResultHandler(audioPlayer, guild, audioManager,
+					event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
-			event.reply(MessageUtil.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."));
+			event.replyEmbeds(
+					MessageUtil.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."))
+					.queue();
 	}
 
 	@Override
 	public void loadFailed(final FriendlyException exception) {
+		logger.error("Loading audio has failed. Severity: {}.", exception.severity);
+		throw exception;
 	}
 
 }

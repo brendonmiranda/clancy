@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,11 @@ public class NowPlayingCmd extends MusicCmd {
 	}
 
 	@Override
-	public void command(CommandEvent event) {
+	public void command(SlashCommandEvent event) {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply(MessageUtil.buildMessage("There is no track playing."));
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing.")).queue();
 			return;
 		}
 
@@ -35,10 +36,10 @@ public class NowPlayingCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null) {
 			AudioTrack audioTrack = audioPlayer.getPlayingTrack();
-			event.reply(MessageUtil.buildMessage("Playing", audioTrack.getInfo().title));
+			event.replyEmbeds(MessageUtil.buildMessage("Playing", audioTrack.getInfo().title)).queue();
 		}
 		else {
-			event.reply(MessageUtil.buildMessage("There is no track playing."));
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing.")).queue();
 		}
 	}
 
