@@ -34,14 +34,18 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	jcenter()
-	maven {
+	maven { // JDA
 		name 'm2-dv8tion'
 		url 'https://m2.dv8tion.net/releases'
+	}
+
+	maven { // JDA-Chewtils
+		url "https://m2.chew.pro/releases"
 	}
 }
 
 dependencies {
-	implementation 'pw.chew:jda-chewtils:1.null'
+	implementation 'pw.chew:jda-chewtils:1.24.1'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
