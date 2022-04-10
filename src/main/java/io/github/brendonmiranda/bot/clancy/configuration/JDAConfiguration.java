@@ -40,7 +40,8 @@ public class JDAConfiguration {
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix).setOwnerId(Long.toString(owner))
 				.addSlashCommands(playCmd, stopCmd, pauseCmd, resumeCmd, skipCmd, nowPlayingCmd, joinCmd)
-				.setActivity(listening("type " + prefix + "help")).build();
+				.setActivity(listening("type /join")).build();
+		// todo: set watching activity
 
 		jda.addEventListener(cmdListener, eventWaiter());
 
