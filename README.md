@@ -18,16 +18,7 @@
  To set the bot up follow this <a href="https://github.com/brendonmiranda/clancy/wiki">installation guide</a>. 
  
 ## Stack
-- Java 
-- Spring Boot
-- RabbitMQ (Spring AMQP)
-- Gradle
-- Docker
-- Github Actions
-- Heroku 
-- Spring Java Format
-- Palantir Docker Gradle Plugin
-- Dependabot
+Spring Boot, Java 11, RabbitMQ (Spring AMQP), Gradle, Docker, Github Actions, Heroku, Spring Java Format, Palantir Docker Gradle Plugin and Dependabot.
  
- #
-<p align="right"><i> This project is possible because of <a href="https://github.com/sedmelluq/lavaplayer">LavaPlayer</a>, <a href="https://github.com/JDA-Applications/JDA-Utilities">JDA-Utilities</a>, <a href="https://github.com/DV8FromTheWorld/JDA">JDA</a> and <a href="https://github.com/jagrosh/MusicBot">MusicBot</a>.</i></p>
+#
+<p align="right"><i> This project is possible because of <a href="https://github.com/sedmelluq/lavaplayer">LavaPlayer</a>, <a href="https://github.com/JDA-Applications/JDA-Utilities">JDA-Utilities</a>, <a href="https://github.com/DV8FromTheWorld/JDA">JDA</a>, <a href="https://github.com/jagrosh/MusicBot">MusicBot</a> and <a href="https://github.com/Chew/JDA-Chewtils">JDA-Chewtils</a>.</i></p>
