@@ -28,7 +28,7 @@ public class NowPlayingCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply("There is no track playing.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing.")).queue();
 			return;
 		}
 
@@ -39,7 +39,7 @@ public class NowPlayingCmd extends MusicCmd {
 			event.reply("Playing: " + audioTrack.getInfo().title).queue();
 		}
 		else {
-			event.reply("There is no track playing.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing.")).queue();
 		}
 	}
 

@@ -37,7 +37,7 @@ public class JoinCmd extends MusicCmd {
 		// it validates if the member who triggers the event is present in a voice
 		// channel.
 		if (memberVoiceChannel == null) {
-			event.reply("You must be in a voice channel.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
 			return;
 		}
 
@@ -53,7 +53,7 @@ public class JoinCmd extends MusicCmd {
 
 		audioManager.openAudioConnection(memberVoiceChannel);
 
-		event.reply("What's up").queue();
+		event.reply("What's up!").queue();
 	}
 
 }

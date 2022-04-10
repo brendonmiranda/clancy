@@ -27,7 +27,7 @@ public class StopCmd extends MusicCmd {
 	public void command(SlashCommandEvent event) {
 
 		stop(event.getGuild());
-		event.reply("The player has stopped.").queue();
+		event.replyEmbeds(MessageUtil.buildMessage("The player has stopped.")).queue();
 	}
 
 	// stop method has been separated to allow reuse of it in the code

@@ -26,7 +26,7 @@ public class ResumeCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(event.getGuild());
 
 		if (audioSendHandler == null) {
-			event.reply("There is no track to resume.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track to resume.")).queue();
 			return;
 		}
 
@@ -34,7 +34,8 @@ public class ResumeCmd extends MusicCmd {
 
 		if (audioPlayer.getPlayingTrack() != null && audioPlayer.isPaused()) {
 			audioPlayer.setPaused(false);
-			event.reply("Resumed: " + audioPlayer.getPlayingTrack().getInfo().title).queue();
+			event.replyEmbeds(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title))
+					.queue();
 		}
 
 	}

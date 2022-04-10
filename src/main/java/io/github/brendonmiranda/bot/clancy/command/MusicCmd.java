@@ -3,6 +3,7 @@ package io.github.brendonmiranda.bot.clancy.command;
 import com.jagrosh.jdautilities.command.SlashCommand;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
+import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -29,7 +30,7 @@ public abstract class MusicCmd extends SlashCommand {
 		 * validates this. A voice channel is reached by the bot through the Join command.
 		 */
 		if (audioManager.getConnectedChannel() == null) {
-			event.reply("Type `" + event.getCommandString() + "join`").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("Type `" + event.getCommandString() + "join`")).queue();
 			return;
 		}
 
@@ -37,7 +38,7 @@ public abstract class MusicCmd extends SlashCommand {
 		 * It validates if the member who trigger the event is present in a voice channel.
 		 */
 		if (memberVoiceChannel == null) {
-			event.reply("You must be in a voice channel.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
 			return;
 		}
 

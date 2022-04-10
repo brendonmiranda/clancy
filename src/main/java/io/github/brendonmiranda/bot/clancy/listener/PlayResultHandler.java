@@ -107,10 +107,10 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		event.replyEmbeds(MessageUtil.buildMessage("Enqueued", track.getInfo().title)).queue();
 
 		if (audioPlayer.isPaused()) {
-			event.replyEmbeds(MessageUtil.buildMessage("Alert",
-					"The track `" + audioPlayer.getPlayingTrack().getInfo().title + "` is paused.")).queue();
-			// \n\nType `" + event.getClient().getPrefix() + "resume` to unpause. // todo:
-			// improve message
+			event.replyEmbeds(
+					MessageUtil.buildMessage("Alert", "The track `" + audioPlayer.getPlayingTrack().getInfo().title
+							+ "` is paused. \n\nType `" + event.getCommandString() + "resume` to unpause."))
+					.queue();
 
 		}
 

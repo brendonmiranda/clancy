@@ -41,7 +41,7 @@ public class SkipCmd extends MusicCmd {
 		AudioSendHandlerImpl audioSendHandler = getAudioSendHandler(guild);
 
 		if (audioSendHandler == null) {
-			event.reply("There is no track playing to skip.").queue();
+			event.replyEmbeds(MessageUtil.buildMessage("There is no track playing to skip.")).queue();
 			return;
 		}
 
@@ -61,7 +61,7 @@ public class SkipCmd extends MusicCmd {
 						new GeneralResultHandler(audioPlayer, guild));
 			}
 			else {
-				event.reply("The queue is empty.").queue();
+				event.replyEmbeds(MessageUtil.buildMessage("The queue is empty.")).queue();
 			}
 
 		}
