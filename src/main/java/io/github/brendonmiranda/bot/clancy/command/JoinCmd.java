@@ -1,6 +1,5 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;

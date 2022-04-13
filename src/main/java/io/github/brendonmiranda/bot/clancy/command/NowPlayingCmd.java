@@ -1,6 +1,5 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.CommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
