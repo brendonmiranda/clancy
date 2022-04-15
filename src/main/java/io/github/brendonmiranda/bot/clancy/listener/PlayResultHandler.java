@@ -104,10 +104,10 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		audioQueueService.enqueue(guild.getName(), track);
 
-		event.replyEmbeds(MessageUtil.buildMessage("Enqueued", track.getInfo().title)).queue();
+		event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Enqueued", track.getInfo().title)).queue();
 
 		if (audioPlayer.isPaused()) {
-			event.replyEmbeds(MessageUtil.buildMessage("Alert", "The track `"
+			event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Alert", "The track `"
 					+ audioPlayer.getPlayingTrack().getInfo().title + "` is paused. \n\nType `/resume` to unpause."))
 					.queue();
 
@@ -152,7 +152,8 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		}
 		else {
-			event.replyEmbeds(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist.")).queue();
+			event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist."))
+					.queue();
 		}
 	}
 
@@ -170,8 +171,9 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 			audioPlayerManager.loadItem("ytsearch:" + args, new PlayResultHandler(audioPlayer, guild, audioManager,
 					event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
-			event.replyEmbeds(
-					MessageUtil.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."))
+			event.getChannel()
+					.sendMessageEmbeds(MessageUtil
+							.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."))
 					.queue();
 	}
 
