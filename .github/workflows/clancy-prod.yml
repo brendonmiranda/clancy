@@ -29,14 +29,14 @@ jobs:
       run: ./gradlew dockerPushDockerHub
 
     - name: Docker pull published image
-      run: docker pull ${{ secrets.DOCKER_HUB_USER }}/clancy:2.0.1
+      run: docker pull ${{ secrets.DOCKER_HUB_USER }}/clancy:2.0.2
 
       # Heroku API key
     - name: Docker Login on Heroku
       run: docker login --username=_ --password=${{ secrets.HEROKU_KEY }} registry.heroku.com
 
     - name: Docker tag on Heroku
-      run: docker tag ${{ secrets.DOCKER_HUB_USER }}/clancy:2.0.1 registry.heroku.com/clancy-prod/worker
+      run: docker tag ${{ secrets.DOCKER_HUB_USER }}/clancy:2.0.2 registry.heroku.com/clancy-prod/worker
 
     - name: Docker push on Heroku
       run: docker push registry.heroku.com/clancy-prod/worker
