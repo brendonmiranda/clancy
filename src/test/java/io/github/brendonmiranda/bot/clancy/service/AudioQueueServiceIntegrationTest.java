@@ -75,7 +75,7 @@ public class AudioQueueServiceIntegrationTest {
 
 		doAnswer(answer).when(listener).foo(audioTrackMessageDTO); // count down
 		given(audioTrackToAudioTrackMessageDTOConverter.convert(ArgumentMatchers.any(AudioTrack.class)))
-				.willReturn(audioTrackMessageDTO);
+			.willReturn(audioTrackMessageDTO);
 
 		// send twice
 		service.enqueue(queueName, mock(AudioTrack.class));

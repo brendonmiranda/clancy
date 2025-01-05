@@ -30,7 +30,7 @@ public class PauseCmd extends MusicCmd {
 		if (audioPlayer.isPaused()) {
 			audioPlayer.setPaused(false);
 			event.replyEmbeds(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title))
-					.queue();
+				.queue();
 			return;
 		}
 
@@ -38,7 +38,8 @@ public class PauseCmd extends MusicCmd {
 			audioPlayer.setPaused(true);
 
 			event.replyEmbeds(MessageUtil.buildMessage("Paused",
-					audioPlayer.getPlayingTrack().getInfo().title + ". \n\nType `/resume` to unpause.")).queue();
+					audioPlayer.getPlayingTrack().getInfo().title + ". \n\nType `/resume` to unpause."))
+				.queue();
 		}
 	}
 

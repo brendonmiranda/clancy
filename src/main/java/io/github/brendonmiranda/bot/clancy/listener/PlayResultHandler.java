@@ -61,8 +61,11 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		this.eventWaiter = eventWaiter;
 		this.message = message;
 		this.ytSearch = ytSearch;
-		this.builder = new OrderedMenu.Builder().allowTextInput(true).useNumbers().useCancelButton(true)
-				.setEventWaiter(eventWaiter).setTimeout(1, TimeUnit.MINUTES);
+		this.builder = new OrderedMenu.Builder().allowTextInput(true)
+			.useNumbers()
+			.useCancelButton(true)
+			.setEventWaiter(eventWaiter)
+			.setTimeout(1, TimeUnit.MINUTES);
 		this.audioQueueService = audioQueueService;
 	}
 
@@ -107,9 +110,11 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Enqueued", track.getInfo().title)).queue();
 
 		if (audioPlayer.isPaused()) {
-			event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Alert", "The track `"
-					+ audioPlayer.getPlayingTrack().getInfo().title + "` is paused. \n\nType `/resume` to unpause."))
-					.queue();
+			event.getChannel()
+				.sendMessageEmbeds(MessageUtil.buildMessage("Alert",
+						"The track `" + audioPlayer.getPlayingTrack().getInfo().title
+								+ "` is paused. \n\nType `/resume` to unpause."))
+				.queue();
 
 		}
 
@@ -120,8 +125,8 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 		audioPlayer.playTrack(track);
 
 		event.getChannel()
-				.sendMessageEmbeds(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title))
-				.queue();
+			.sendMessageEmbeds(MessageUtil.buildMessage("Playing", audioPlayer.getPlayingTrack().getInfo().title))
+			.queue();
 
 	}
 
@@ -152,8 +157,9 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 
 		}
 		else {
-			event.getChannel().sendMessageEmbeds(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist."))
-					.queue();
+			event.getChannel()
+				.sendMessageEmbeds(MessageUtil.buildMessage("Sorry, I'm unable to load a playlist."))
+				.queue();
 		}
 	}
 
@@ -172,9 +178,9 @@ public class PlayResultHandler implements AudioLoadResultHandler {
 					event, audioPlayerManager, eventWaiter, message, true, audioQueueService));
 		else
 			event.getChannel()
-					.sendMessageEmbeds(MessageUtil
-							.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."))
-					.queue();
+				.sendMessageEmbeds(
+						MessageUtil.buildMessage("Sorry, I couldn't find your track. Please, rephrase and try again."))
+				.queue();
 	}
 
 	@Override

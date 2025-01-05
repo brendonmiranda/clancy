@@ -49,7 +49,7 @@ public class PlayCmd extends MusicCmd {
 		this.help = "it plays or queues a song";
 
 		this.options = Collections
-				.singletonList(new OptionData(OptionType.STRING, MUSIC_ARG, "What you wanna play ?").setRequired(true));
+			.singletonList(new OptionData(OptionType.STRING, MUSIC_ARG, "What you wanna play ?").setRequired(true));
 	}
 
 	@Override

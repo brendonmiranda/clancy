@@ -34,7 +34,7 @@ public class ResumeCmd extends MusicCmd {
 		if (audioPlayer.getPlayingTrack() != null && audioPlayer.isPaused()) {
 			audioPlayer.setPaused(false);
 			event.replyEmbeds(MessageUtil.buildMessage("Resumed", audioPlayer.getPlayingTrack().getInfo().title))
-					.queue();
+				.queue();
 		}
 
 	}
