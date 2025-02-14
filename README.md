@@ -7,7 +7,7 @@
 
 <p>Give it a ⭐</p>
 
-<p> Clancy is a Discord music bot made in Spring Boot and Java. It has been mainly built to test technologies and provide a nice music bot for my friends. </p>
+<p> Clancy is a Discord music bot made in Spring Boot and Java. It has been mainly built to test technologies and provide a nice open source music bot. </p>
 
 <p> If you are interested in either set it up to run yourself or explore the code to understand how to build your own bot, this is a pretty nice project to follow. </p>
 
