@@ -34,12 +34,12 @@ repositories {
 	mavenLocal()
 	mavenCentral()
 	jcenter()
-	maven { // JDA
+	maven { // JDA (fallback)
 		name 'm2-dv8tion'
 		url 'https://m2.dv8tion.net/releases'
 	}
 
-	maven { // JDA-Chewtils
+	maven { // JDA-Chewtils (fallback)
 		url "https://m2.chew.pro/releases"
 	}
 }
@@ -47,15 +47,20 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation 'net.dv8tion:JDA:4.4.0_352'
-	implementation 'pw.chew:jda-chewtils:1.24.1'
+	// Upgrade to JDA 5
+	implementation 'net.dv8tion:JDA:5.0.0'
+
+	// Keep Lavaplayer
 	implementation 'com.sedmelluq:lavaplayer:1.3.78'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+	// Remove pw.chew:jda-chewtils and rely on in-repo compatibility shims for jdautilities
+
+testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+
+testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
 docker {
@@ -69,5 +74,5 @@ docker {
 test {
 	useJUnitPlatform()
 	// it should pass all JVM options to the app started via test gradle task
-	systemProperties = System.properties // https://stackoverflow.com/questions/25079244/how-to-pass-jvm-options-from-bootrun/25079415
+	systemProperties = System.properties // https://stackoverflow.com/questions/25079444/how-to-pass-jvm-options-from-bootrun/25079415
 }
