@@ -1,70 +1,76 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
-import com.jagrosh.jdautilities.command.SlashCommand;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+
+import java.util.List;
 
 /**
- * @author brendonmiranda
+ * Minimal replacement for jdautilities' SlashCommand base used by this project.
  */
-public abstract class MusicCmd extends SlashCommand {
+public abstract class MusicCmd {
 
-	public MusicCmd() {
-		this.guildOnly = true;
-		this.category = new Category("Music");
-	}
+    // command metadata (set in constructors of concrete commands)
+    public String name;
+    public String help;
+    public boolean guildOnly = true;
+    public List<OptionData> options;
 
-	@Override
-	protected void execute(SlashCommandEvent event) {
+    public MusicCmd() {
+        this.guildOnly = true;
+    }
 
-		AudioManager audioManager = getAudioManager(event.getGuild());
-		VoiceChannel memberVoiceChannel = getChannel(event);
+    /**
+     * Entry point called by CommandRouter when a slash command is triggered.
+     */
+    public void execute(SlashCommandInteractionEvent event) {
 
-		/*
-		 * To execute any music command the bot needs to be in a voice channel. It
-		 * validates this. A voice channel is reached by the bot through the Join command.
-		 */
-		if (audioManager.getConnectedChannel() == null) {
-			event.replyEmbeds(MessageUtil.buildMessage("Type `/join`")).queue();
-			return;
-		}
+        if (this.guildOnly && event.getGuild() == null) {
+            event.replyEmbeds(MessageUtil.buildMessage("This command can only be used inside a server.")).queue();
+            return;
+        }
 
-		/*
-		 * It validates if the member who trigger the event is present in a voice channel.
-		 */
-		if (memberVoiceChannel == null) {
-			event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
-			return;
-		}
+        AudioManager audioManager = null;
+        if (event.getGuild() != null) {
+            audioManager = event.getGuild().getAudioManager();
+        }
 
-		command(event);
-	}
+        // If this is a music command and the bot is not connected, tell user to use /join
+        if (audioManager != null && audioManager.getConnectedChannel() == null && !"join".equalsIgnoreCase(name)) {
+            event.replyEmbeds(MessageUtil.buildMessage("Type `/join`")).queue();
+            return;
+        }
 
-	protected AudioSendHandlerImpl getAudioSendHandler(Guild guild) {
-		return (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
-	}
+        VoiceChannel memberVoiceChannel = getChannel(event);
+        if (memberVoiceChannel == null && !"join".equalsIgnoreCase(name)) {
+            event.replyEmbeds(MessageUtil.buildMessage("You must be in a voice channel.")).queue();
+            return;
+        }
 
-	protected AudioPlayer getAudioPlayer(AudioSendHandlerImpl audioSendHandler) {
-		return audioSendHandler.getAudioPlayer();
-	}
+        command(event);
+    }
 
-	protected Guild getGuild(SlashCommandEvent event) {
-		return event.getGuild();
-	}
+    protected AudioSendHandlerImpl getAudioSendHandler(Guild guild) {
+        return (AudioSendHandlerImpl) guild.getAudioManager().getSendingHandler();
+    }
 
-	protected AudioManager getAudioManager(Guild guild) {
-		return guild.getAudioManager();
-	}
+    protected Guild getGuild(SlashCommandInteractionEvent event) {
+        return event.getGuild();
+    }
 
-	protected VoiceChannel getChannel(SlashCommandEvent event) {
-		return event.getMember().getVoiceState().getChannel();
-	}
+    protected AudioManager getAudioManager(Guild guild) {
+        return guild.getAudioManager();
+    }
 
-	public abstract void command(SlashCommandEvent event);
+    protected VoiceChannel getChannel(SlashCommandInteractionEvent event) {
+        if (event.getMember() == null || event.getMember().getVoiceState() == null) return null;
+        return event.getMember().getVoiceState().getChannel();
+    }
 
+    public abstract void command(SlashCommandInteractionEvent event);
 }
