@@ -1,3 +1,11 @@
+<p align="center"><b>
+This project hasn’t been actively maintained since 2022, after I added support for Discord slash commands — which was a major Discord feature introduction at the time.
+
+Since then, JDA has gone through several major updates, and the project currently suffers from some compatibility issues. I’d like to come back and fix things properly at some point, but for now the project should be considered unmaintained.
+</b></p>
+
+<br/>
+
 <p align="center">
 <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-black.svg"></a>
  <a href="https://discord.gg/UCfNTczQKm"><img alt="Discord" src="https://img.shields.io/discord/746743953755209768?label=&logo=discord&logoColor=white&color=black&labelColor=black"></a>
