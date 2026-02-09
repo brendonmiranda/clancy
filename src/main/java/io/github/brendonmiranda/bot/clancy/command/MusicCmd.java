@@ -1,12 +1,12 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
 import com.jagrosh.jdautilities.command.SlashCommand;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import io.github.brendonmiranda.bot.clancy.listener.AudioSendHandlerImpl;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 
 /**
@@ -23,7 +23,7 @@ public abstract class MusicCmd extends SlashCommand {
 	protected void execute(SlashCommandEvent event) {
 
 		AudioManager audioManager = getAudioManager(event.getGuild());
-		VoiceChannel memberVoiceChannel = getChannel(event);
+		AudioChannel memberVoiceChannel = getChannel(event);
 
 		/*
 		 * To execute any music command the bot needs to be in a voice channel. It
@@ -61,7 +61,7 @@ public abstract class MusicCmd extends SlashCommand {
 		return guild.getAudioManager();
 	}
 
-	protected VoiceChannel getChannel(SlashCommandEvent event) {
+	protected AudioChannel getChannel(SlashCommandEvent event) {
 		return event.getMember().getVoiceState().getChannel();
 	}
 

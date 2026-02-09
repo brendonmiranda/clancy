@@ -1,9 +1,9 @@
 package io.github.brendonmiranda.bot.clancy.command;
 
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.VoiceChannel;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ public class JoinCmd extends MusicCmd {
 	protected void execute(SlashCommandEvent event) {
 		logger.debug("Performing validations on join command.");
 
-		VoiceChannel memberVoiceChannel = getChannel(event);
+		AudioChannel memberVoiceChannel = getChannel(event);
 
 		// it validates if the member who triggers the event is present in a voice
 		// channel.
@@ -46,7 +46,7 @@ public class JoinCmd extends MusicCmd {
 
 	@Override
 	public void command(SlashCommandEvent event) {
-		VoiceChannel memberVoiceChannel = getChannel(event);
+		AudioChannel memberVoiceChannel = getChannel(event);
 		Guild guild = getGuild(event);
 		AudioManager audioManager = getAudioManager(guild);
 

@@ -9,11 +9,10 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import io.github.brendonmiranda.bot.clancy.command.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.security.auth.login.LoginException;
 
 import static net.dv8tion.jda.api.entities.Activity.listening;
 
@@ -34,9 +33,11 @@ public class JDAConfiguration {
 
 	@Bean
 	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
-			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) throws LoginException {
+			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) {
 
-		JDA jda = JDABuilder.createDefault(token).build();
+		JDA jda = JDABuilder.createDefault(token, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGES,
+				GatewayIntent.GUILD_MESSAGE_REACTIONS)
+			.build();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix)
 			.setOwnerId(Long.toString(owner))
