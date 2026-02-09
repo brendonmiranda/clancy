@@ -35,8 +35,9 @@ public class JDAConfiguration {
 	public JDA load(PlayCmd playCmd, StopCmd stopCmd, PauseCmd pauseCmd, ResumeCmd resumeCmd, SkipCmd skipCmd,
 			NowPlayingCmd nowPlayingCmd, JoinCmd joinCmd) {
 
-		JDA jda = JDABuilder.createDefault(token, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGES,
-				GatewayIntent.GUILD_MESSAGE_REACTIONS)
+		JDA jda = JDABuilder
+			.createDefault(token, GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MESSAGES,
+					GatewayIntent.GUILD_MESSAGE_REACTIONS)
 			.build();
 
 		CommandClient cmdListener = new CommandClientBuilder().setPrefix(prefix)
