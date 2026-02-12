@@ -37,6 +37,10 @@ repositories {
 	maven { // JDA-Chewtils
 		url "https://m2.chew.pro/snapshots"
 	}
+
+	maven { // youtube-source (lavalink-devs)
+		url "https://maven.lavalink.dev/releases"
+	}
 }
 
 dependencies {
@@ -45,6 +49,7 @@ dependencies {
 	implementation 'net.dv8tion:JDA:5.2.3'
 	implementation 'pw.chew:jda-chewtils:2.0-SNAPSHOT'
 	implementation 'dev.arbjerg:lavaplayer:2.2.6'
+	implementation 'dev.lavalink.youtube:v2:1.17.0'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

@@ -6,6 +6,7 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import dev.lavalink.youtube.YoutubeAudioSourceManager;
 import io.github.brendonmiranda.bot.clancy.command.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -67,6 +68,7 @@ public class JDAConfiguration {
 	public AudioPlayerManager audioPlayerManager() {
 
 		AudioPlayerManager audioPlayerManager = new DefaultAudioPlayerManager();
+		audioPlayerManager.registerSourceManager(new YoutubeAudioSourceManager());
 		AudioSourceManagers.registerRemoteSources(audioPlayerManager);
 		return audioPlayerManager;
 	}
