@@ -8,7 +8,7 @@ import io.github.brendonmiranda.bot.clancy.listener.GeneralResultHandler;
 import io.github.brendonmiranda.bot.clancy.service.AudioQueueService;
 import io.github.brendonmiranda.bot.clancy.util.MessageUtil;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import com.jagrosh.jdautilities.command.SlashCommandEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
